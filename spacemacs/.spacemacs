@@ -5,6 +5,10 @@
 (defun dotspacemacs/layers ()
   "Configuration Layers declaration."
   (setq-default
+   ;; Base distribution to use. This is a layer contained in the directory
+   ;; `+distribution'. For now available distributions are `spacemacs-base'
+   ;; or `spacemacs'. (default 'spacemacs)
+   dotspacemacs-distribution 'spacemacs
    ;; List of additional paths where to look for configuration layers.
    ;; Paths must have a trailing slash (i.e. `~/.mycontribs/')
    dotspacemacs-configuration-layer-path '()
@@ -202,7 +206,7 @@
     (message "Region or buffer evaluated!")
     (setq deactivate-mark t))) ; deactive the region, regardless
 
-(defun dotspacemacs/config ()
+(defun dotspacemacs/user-config ()
   ;; We want company-mode enabled globally
   (global-company-mode)
   ;; Always truncate lines
