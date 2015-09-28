@@ -77,7 +77,7 @@
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press <SPC> T n to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-   dotspacemacs-themes '(molokai spacemacs-dark soft-charcoal smyx material)
+   dotspacemacs-themes '(wombat molokai spacemacs-dark soft-charcoal smyx material)
    ;; If non nil the cursor color matches the state color.
    dotspacemacs-colorize-cursor-according-to-state t
    ;; Default font. `powerline-scale' allows to quickly tweak the mode-line
@@ -87,7 +87,7 @@
                                :size 12.3
                                :weight normal
                                :width normal
-                               :powerline-scale 1.1)
+                               :powerline-scale 1.5)
    ;; The leader key
    dotspacemacs-leader-key "SPC"
    ;; The leader key accessible in `emacs state' and `insert state'
@@ -213,8 +213,8 @@
   You are free to put any
 user code."
   (set-variable 'ycmd-server-command `("python", (expand-file-name "~/.vim/bundle/YouCompleteMe/third_party/ycmd/ycmd/")))
-  (add-hook 'js2-mode-hook 'ycmd-mode)
-  (add-hook 'php-mode-hook 'ycmd-mode)
+  ;; (add-hook 'js2-mode-hook 'ycmd-mode)
+  ;; (add-hook 'php-mode-hook 'ycmd-mode)
   ;; (setq ad-redefinition-action 'accept)
   )
 
@@ -228,7 +228,7 @@ user code."
   ;; Simplyfy the GUI title
   (setq frame-title-format "Emacs")
   ;; Set powerline separators
-  (setq powerline-default-separator 'arrow)
+  (setq powerline-default-separator 'contour)
   ;; Enable line numbers as default in some modes
   ;;(add-to-hooks #'linum-mode '(js2-mode-hook))
   ;; Add web-mode as default when working with php files
