@@ -26,6 +26,7 @@
      git
      evil-commentary
      evil-snipe
+     ycmd
      vim-empty-lines
      javascript
      php
@@ -76,7 +77,7 @@
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press <SPC> T n to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-   dotspacemacs-themes '(smyx soft-charcoal smyx material)
+   dotspacemacs-themes '(spacemacs-dark soft-charcoal smyx material)
    ;; If non nil the cursor color matches the state color.
    dotspacemacs-colorize-cursor-according-to-state t
    ;; Default font. `powerline-scale' allows to quickly tweak the mode-line
@@ -206,6 +207,17 @@
     (message "Region or buffer evaluated!")
     (setq deactivate-mark t))) ; deactive the region, regardless
 
+
+(defun dotspacemacs/user-init ()
+  "Initialization function for user code. It is called immediately after `dotspacemacs/init'.
+  You are free to put any
+user code."
+  (set-variable 'ycmd-server-command `("python", (expand-file-name "~/.vim/bundle/YouCompleteMe/third_party/ycmd/ycmd/")))
+  (add-hook 'js2-mode-hook 'ycmd-mode)
+  (add-hook 'php-mode-hook 'ycmd-mode)
+  ;; (setq ad-redefinition-action 'accept)
+  )
+
 (defun dotspacemacs/user-config ()
   ;; We want company-mode enabled globally
   (global-company-mode)
@@ -234,6 +246,8 @@
   ;; Set helm ignore folders
   ;;(add-to-list 'projectile-ignored-directories "node_modules")
 
+  ;; set fringe style
+  ;;(set-fringe-style 'minimal)
   ;; Map keys to user customer functions [Use `m` for namespacing]
   ;; File related
   (evil-leader/set-key (kbd "omc") 'u/add-current-file-name)
