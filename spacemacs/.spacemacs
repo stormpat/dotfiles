@@ -29,6 +29,7 @@
      ycmd
      vim-empty-lines
      javascript
+     react
      php
      elixir
      themes-megapack
@@ -87,11 +88,11 @@
    ;; Default font. `powerline-scale' allows to quickly tweak the mode-line
    ;; size to make separators look not too crappy.
    ;; Good ones => Menlo => Fira Mono
-   dotspacemacs-default-font '("Menlo"
-                               :size 12.3
+   dotspacemacs-default-font '("M+ 2m"
+                               :size 13
                                :weight normal
                                :width normal
-                               :powerline-scale 1.5)
+                               :powerline-scale 1.1)
    ;; The leader key
    dotspacemacs-leader-key "SPC"
    ;; The leader key accessible in `emacs state' and `insert state'
@@ -220,6 +221,8 @@ user code."
   ;; (add-hook 'js2-mode-hook 'ycmd-mode)
   ;; (add-hook 'php-mode-hook 'ycmd-mode)
   ;; (setq ad-redefinition-action 'accept)
+  ;; Limit the kill ring maximum size
+  (setq kill-ring-max 5)
   )
 
 (defun dotspacemacs/user-config ()
@@ -232,7 +235,7 @@ user code."
   ;; Simplyfy the GUI title
   (setq frame-title-format "Emacs")
   ;; Set powerline separators
-  (setq powerline-default-separator 'contour)
+  (setq powerline-default-separator 'arrow)
   ;; Enable line numbers as default in some modes
   ;;(add-to-hooks #'linum-mode '(js2-mode-hook))
   ;; Add web-mode as default when working with php files
