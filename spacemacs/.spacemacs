@@ -28,12 +28,13 @@
      evil-snipe
      ycmd
      vim-empty-lines
+     (haskell :variables haskell-enable-ghc-mod-support t)
      javascript
      react
+     org
      php
      elixir
      themes-megapack
-     markdown
      (auto-completion
        :variables
         auto-completion-private-snippets-directory "~/.emacs.d/private/snippets/yasnippet-snippets"
@@ -82,7 +83,7 @@
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press <SPC> T n to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-   dotspacemacs-themes '(solarized-dark)
+   dotspacemacs-themes '(solarized-light solarized-dark)
    ;; If non nil the cursor color matches the state color.
    dotspacemacs-colorize-cursor-according-to-state t
    ;; Default font. `powerline-scale' allows to quickly tweak the mode-line
@@ -221,13 +222,21 @@ user code."
   ;; (add-hook 'js2-mode-hook 'ycmd-mode)
   ;; (add-hook 'php-mode-hook 'ycmd-mode)
   ;; (setq ad-redefinition-action 'accept)
+  ;; Add haskell's cabal to path.
+  (add-to-list 'exec-path "/Users/stormpat/Library/Haskell/bin")
+  (add-to-list 'exec-path "~/.cabal/bin")
   ;; Limit the kill ring maximum size
-  (setq kill-ring-max 5)
+  ;; Limit the kill ring maximum size
+  (setq kill-ring-max 10)
   )
 
 (defun dotspacemacs/user-config ()
+  ;; Silence js-2 mode about trailing comma
+  (setq-default js2-strict-trailing-comma-warning nil)
   ;; We want company-mode enabled globally
   (global-company-mode)
+  ;; make powerline more minimal
+  ;; (powerline-default-theme)
   ;; Always truncate lines
   (setq-default truncate-lines t)
   ;; Disable smartparens
