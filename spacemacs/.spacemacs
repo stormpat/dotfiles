@@ -85,7 +85,7 @@ values."
    ;; List of items to show in the startup buffer. If nil it is disabled.
    ;; Possible values are: `recents' `bookmarks' `projects'.
    ;; (default '(recents projects))
-   dotspacemacs-startup-lists '(recents bookmarks projects)
+   dotspacemacs-startup-lists '(recents projects)
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press <SPC> T n to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
@@ -172,7 +172,7 @@ values."
    ;; If non nil smooth scrolling (native-scrolling) is enabled. Smooth
    ;; scrolling overrides the default behavior of Emacs which recenters the
    ;; point when it reaches the top or bottom of the screen. (default t)
-   dotspacemacs-smooth-scrolling t
+   dotspacemacs-smooth-scrolling nil
    ;; If non-nil smartparens-strict-mode will be enabled in programming modes.
    ;; (default nil)
    dotspacemacs-smartparens-strict-mode nil
@@ -259,8 +259,9 @@ user code."
   "Configuration function for user code.
  This function is called at the very end of Spacemacs initialization after
 layers configuration. You are free to put any user code."
-  ;; Silence js-2 mode about trailing comma
+  ;; Silence some js2-mode errors (instead lint with eslint)
   (setq-default js2-strict-trailing-comma-warning nil)
+  (setq js2-highlight-external-variables nil)
   ;; We want company-mode enabled globally
   (global-company-mode)
   ;; make powerline more minimal
@@ -290,6 +291,8 @@ layers configuration. You are free to put any user code."
   ;; Set helm ignore folders
   ;;(add-to-list 'projectile-ignored-directories "node_modules")
 
+  ;; Disable neotree vc-integration -> spacemacs/issues/2943
+  (setq neo-vc-integration nil)
   ;; set fringe style
   ;;(set-fringe-style 'minimal)
   ;; Map keys to user customer functions [Use `m` for namespacing]
