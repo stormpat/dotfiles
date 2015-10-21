@@ -1,11 +1,8 @@
 ;; -*- mode: emacs-lisp -*-
-;; This file is loaded by Spacemacs at startup.
-;; It must be stored in your home directory.
 
 (defun dotspacemacs/layers ()
-  "Configuration Layers declaration.
-You should not put any user code in this function besides modifying the variable
-values."
+  "Configuration Layers declaration. You should not put any user code
+   in this function besides modifying the variable values."
   (setq-default
    ;; Base distribution to use. This is a layer contained in the directory
    ;; `+distribution'. For now available distributions are `spacemacs-base'
@@ -18,11 +15,6 @@ values."
    ;; of a list then all discovered layers will be installed.
    dotspacemacs-configuration-layers
    '(
-     ;; ----------------------------------------------------------------
-     ;; Example of useful layers you may want to use right away.
-     ;; Uncomment some layer names and press <SPC f e R> (Vim style) or
-     ;; <M-m f e R> (Emacs style) to install them.
-     ;; ----------------------------------------------------------------
      better-defaults
      emacs-lisp
      git
@@ -36,6 +28,7 @@ values."
      org
      php
      elixir
+     vim-powerline
      themes-megapack
      (auto-completion
       :variables
@@ -60,18 +53,13 @@ values."
    dotspacemacs-delete-orphan-packages t))
 
 (defun dotspacemacs/init ()
-  "Initialization function.
-This function is called at the very startup of Spacemacs initialization
-before layers configuration.
-You should not put any user code in there besides modifying the variable
-values."
+  "Initialization function. This function is called at the very startup
+   of Spacemacs initialization before layers configuration.
+   You should not put any user code in there besides modifying the variable values."
   ;; This setq-default sexp is an exhaustive list of all the supported
   ;; spacemacs settings.
   (setq-default
-   ;; One of `vim', `emacs' or `hybrid'. Evil is always enabled but if the
-   ;; variable is `emacs' then the `holy-mode' is enabled at startup. `hybrid'
-   ;; uses emacs key bindings for vim's insert mode, but otherwise leaves evil
-   ;; unchanged. (default 'vim)
+   ;; One of `vim', `emacs' or `hybrid'.
    dotspacemacs-editing-style 'vim
    ;; If non nil output loading progress in `*Messages*' buffer. (default nil)
    dotspacemacs-verbose-loading nil
@@ -216,6 +204,11 @@ values."
   (interactive)
   (helm-do-ag "~/.emacs.d/doc/"))
 
+(defun u/paste ()
+  (interactive)
+  (call-process-region (point)
+                       (if mark-active (mark) (point)) "pbpaste" t t))
+
 (defun u/node-eval ()
   "Evaluate the current buffer (or region if mark-active),
    and return the result into another buffer,
@@ -264,14 +257,12 @@ layers configuration. You are free to put any user code."
   (setq js2-highlight-external-variables nil)
   ;; We want company-mode enabled globally
   (global-company-mode)
-  ;; make powerline more minimal
-  ;; (powerline-default-theme)
   ;; Always truncate lines
   (setq-default truncate-lines t)
   ;; Disable smartparens
   (turn-off-show-smartparens-mode)
   ;; Simplyfy the GUI title
-  (setq frame-title-format "Emacs")
+  (setq frame-title-format "M-x")
   ;; Set powerline separators
   (setq powerline-default-separator 'arrow)
   ;; Enable line numbers as default in some modes
@@ -291,6 +282,8 @@ layers configuration. You are free to put any user code."
   ;; Set helm ignore folders
   ;;(add-to-list 'projectile-ignored-directories "node_modules")
 
+  ;; testing on osx pbpaste
+  (setq x-select-enable-clipboard t)
   ;; Disable neotree vc-integration -> spacemacs/issues/2943
   (setq neo-vc-integration nil)
   ;; set fringe style
@@ -305,7 +298,8 @@ layers configuration. You are free to put any user code."
   (evil-leader/set-key (kbd "omx") 'magit-blame-quit)
   ;; Evalute JavaScript
   (evil-leader/set-key (kbd "oe") 'u/node-eval)
-
+  ;; Paste from OSX clipboard
+  (evil-leader/set-key (kbd "op") 'u/paste)
   ;; Buffer related (should be under o directly)
   (evil-leader/set-key (kbd "ol") 'avy-goto-line)
   (evil-leader/set-key (kbd "oc") 'avy-copy-line)
