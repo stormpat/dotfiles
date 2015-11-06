@@ -22,7 +22,7 @@
      evil-snipe
      ycmd
      vim-empty-lines
-     (haskell :variables haskell-enable-ghc-mod-support t)
+     haskell
      javascript
      react
      org
@@ -77,13 +77,14 @@
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press <SPC> T n to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-   dotspacemacs-themes '(solarized-dark solarized-light)
+   dotspacemacs-themes '(oldlace solarized-dark solarized-light)
    ;; If non nil the cursor color matches the state color.
    dotspacemacs-colorize-cursor-according-to-state t
    ;; Default font. `powerline-scale' allows to quickly tweak the mode-line
    ;; size to make separators look not too crappy.
-   dotspacemacs-default-font '("Fira Mono"
-                               :size 12
+   ;; Approved: M+ 2m, Fira Mono
+   dotspacemacs-default-font '("M+ 1mn"
+                               :size 14
                                :weight normal
                                :width normal
                                :powerline-scale 1.1)
@@ -204,11 +205,6 @@
   (interactive)
   (helm-do-ag "~/.emacs.d/doc/"))
 
-(defun u/paste ()
-  (interactive)
-  (call-process-region (point)
-                       (if mark-active (mark) (point)) "pbpaste" t t))
-
 (defun u/node-eval ()
   "Evaluate the current buffer (or region if mark-active),
    and return the result into another buffer,
@@ -226,7 +222,7 @@
      start end     ; seems the order does not matter
      "node"        ; node.js
      nil           ; don't delete region
-     "node.js"     ; output buffer
+     "*node.js*"     ; output buffer
      nil)          ; no redisply during output
     (message "Region or buffer evaluated!")
     (setq deactivate-mark t))) ; deactive the region, regardless
@@ -240,10 +236,6 @@ user code."
   ;; (add-hook 'js2-mode-hook 'ycmd-mode)
   ;; (add-hook 'php-mode-hook 'ycmd-mode)
   ;; (setq ad-redefinition-action 'accept)
-  ;; Add haskell's cabal to path.
-  (add-to-list 'exec-path "/Users/stormpat/Library/Haskell/bin")
-  (add-to-list 'exec-path "~/.cabal/bin")
-  ;; Limit the kill ring maximum size
   ;; Limit the kill ring maximum size
   (setq kill-ring-max 10)
   )
@@ -263,6 +255,8 @@ layers configuration. You are free to put any user code."
   (turn-off-show-smartparens-mode)
   ;; Simplyfy the GUI title
   (setq frame-title-format "M-x")
+  ;; Paste behaviour
+  (fset 'evil-visual-update-x-selection 'ignore)
   ;; Set powerline separators
   (setq powerline-default-separator 'arrow)
   ;; Enable line numbers as default in some modes
@@ -281,13 +275,15 @@ layers configuration. You are free to put any user code."
   (add-hook 'web-mode-hook 'stormpat/web-mode-hook)
   ;; Set helm ignore folders
   ;;(add-to-list 'projectile-ignored-directories "node_modules")
-
+  ;; Add haskell's cabal to path.
+  (add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
+  (add-to-list 'exec-path "~/.local/bin/")
   ;; testing on osx pbpaste
   (setq x-select-enable-clipboard t)
   ;; Disable neotree vc-integration -> spacemacs/issues/2943
   (setq neo-vc-integration nil)
-  ;; set fringe style
-  ;;(set-fringe-style 'minimal)
+  ;; set fringe style to minimal (1px by 1px)
+  (fringe-mode '(1 . 1))
   ;; Map keys to user customer functions [Use `m` for namespacing]
   ;; File related
   (evil-leader/set-key (kbd "omc") 'u/add-current-file-name)
@@ -298,8 +294,6 @@ layers configuration. You are free to put any user code."
   (evil-leader/set-key (kbd "omx") 'magit-blame-quit)
   ;; Evalute JavaScript
   (evil-leader/set-key (kbd "oe") 'u/node-eval)
-  ;; Paste from OSX clipboard
-  (evil-leader/set-key (kbd "op") 'u/paste)
   ;; Buffer related (should be under o directly)
   (evil-leader/set-key (kbd "ol") 'avy-goto-line)
   (evil-leader/set-key (kbd "oc") 'avy-copy-line)
