@@ -22,7 +22,7 @@
      evil-snipe
      ycmd
      vim-empty-lines
-     (haskell :variables haskell-enable-ghc-mod-support t)
+     haskell
      javascript
      react
      org
@@ -77,13 +77,14 @@
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press <SPC> T n to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-   dotspacemacs-themes '(solarized-dark solarized-light)
+   dotspacemacs-themes '(oldlace solarized-dark solarized-light)
    ;; If non nil the cursor color matches the state color.
    dotspacemacs-colorize-cursor-according-to-state t
    ;; Default font. `powerline-scale' allows to quickly tweak the mode-line
    ;; size to make separators look not too crappy.
-   dotspacemacs-default-font '("Fira Mono"
-                               :size 12
+   ;; Approved: M+ 2m, Fira Mono
+   dotspacemacs-default-font '("M+ 1mn"
+                               :size 14
                                :weight normal
                                :width normal
                                :powerline-scale 1.1)
@@ -235,10 +236,6 @@ user code."
   ;; (add-hook 'js2-mode-hook 'ycmd-mode)
   ;; (add-hook 'php-mode-hook 'ycmd-mode)
   ;; (setq ad-redefinition-action 'accept)
-  ;; Add haskell's cabal to path.
-  (add-to-list 'exec-path "/Users/stormpat/Library/Haskell/bin")
-  (add-to-list 'exec-path "~/.cabal/bin")
-  ;; Limit the kill ring maximum size
   ;; Limit the kill ring maximum size
   (setq kill-ring-max 10)
   )
@@ -278,13 +275,15 @@ layers configuration. You are free to put any user code."
   (add-hook 'web-mode-hook 'stormpat/web-mode-hook)
   ;; Set helm ignore folders
   ;;(add-to-list 'projectile-ignored-directories "node_modules")
-
+  ;; Add haskell's cabal to path.
+  (add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
+  (add-to-list 'exec-path "~/.local/bin/")
   ;; testing on osx pbpaste
   (setq x-select-enable-clipboard t)
   ;; Disable neotree vc-integration -> spacemacs/issues/2943
   (setq neo-vc-integration nil)
-  ;; set fringe style
-  ;;(set-fringe-style 'minimal)
+  ;; set fringe style to minimal (1px by 1px)
+  (fringe-mode '(1 . 1))
   ;; Map keys to user customer functions [Use `m` for namespacing]
   ;; File related
   (evil-leader/set-key (kbd "omc") 'u/add-current-file-name)
