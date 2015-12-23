@@ -19,22 +19,21 @@
      emacs-lisp
      git
      evil-commentary
+     rust
      evil-snipe
-     ycmd
      vim-empty-lines
      haskell
      javascript
      react
-     org
+     elm
      php
      elixir
-     vim-powerline
-     themes-megapack
+     ;;vim-powerline
      (auto-completion
       :variables
       auto-completion-private-snippets-directory "~/.emacs.d/private/snippets/yasnippet-snippets"
       auto-completion-enable-sort-by-usage t
-      auto-completion-enable-snippets-in-popup t
+      auto-completion-enable-snippets-in-popup nil
       auto-completion-enable-help-help-tooltip t)
      syntax-checking
      version-control
@@ -46,7 +45,7 @@
    ;; configuration in `dotspacemacs/config'.
    dotspacemacs-additional-packages '()
    ;; A list of packages and/or extensions that will not be install and loaded.
-   dotspacemacs-excluded-packages '()
+   dotspacemacs-excluded-packages '(powerline) ;; powerline for default
    ;; If non-nil spacemacs will delete any orphan packages, i.e. packages that
    ;; are declared in a layer which is not a member of
    ;; the list `dotspacemacs-configuration-layers'. (default t)
@@ -77,16 +76,17 @@
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press <SPC> T n to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-   dotspacemacs-themes '(oldlace solarized-dark solarized-light)
+   dotspacemacs-themes '(spacemacs-dark leuven solarized-light)
    ;; If non nil the cursor color matches the state color.
    dotspacemacs-colorize-cursor-according-to-state t
    ;; Default font. `powerline-scale' allows to quickly tweak the mode-line
    ;; size to make separators look not too crappy.
-   ;; Approved: M+ 2m, Fira Mono
-   dotspacemacs-default-font '("M+ 1mn"
-                               :size 14
+   ;; Approved: M+ 2m, M+ 1mn, Fira Mono, Monoid, Aurulent Sans Mono,  Menlo, Meslo LG S DZ
+   dotspacemacs-default-font '("Monoid"
+                               :size 11
                                :weight normal
                                :width normal
+                               :slant italic
                                :powerline-scale 1.1)
    ;; The leader key
    dotspacemacs-leader-key "SPC"
@@ -222,27 +222,34 @@
      start end     ; seems the order does not matter
      "node"        ; node.js
      nil           ; don't delete region
-     "*node.js*"     ; output buffer
+     "*node.js eval*"     ; output buffer
      nil)          ; no redisply during output
     (message "Region or buffer evaluated!")
-    (setq deactivate-mark t))) ; deactive the region, regardless
+    (setq deactivate-mark nil))) ; deactive the region, regardless
 
 
 (defun dotspacemacs/user-init ()
   "Initialization function for user code.
 It is called immediately after `dotspacemacs/init'.  You are free to put any
 user code."
-  (set-variable 'ycmd-server-command `("python", (expand-file-name "~/.vim/bundle/YouCompleteMe/third_party/ycmd/ycmd/")))
+  ;; (set-variable 'ycmd-server-command `("python", (expand-file-name "~/.vim/bundle/YouCompleteMe/third_party/ycmd/ycmd/")))
   ;; (add-hook 'js2-mode-hook 'ycmd-mode)
   ;; (add-hook 'php-mode-hook 'ycmd-mode)
   ;; (setq ad-redefinition-action 'accept)
   ;; Limit the kill ring maximum size
+  ;; JSON indentation to 2 spaces.
+  (add-hook 'json-mode-hook
+            (lambda ()
+              (make-local-variable 'js-indent-level)
+              (setq js-indent-level 2)))
+  ;; Limit kill ring to 10 items
   (setq kill-ring-max 10)
+
   )
 
 (defun dotspacemacs/user-config ()
   "Configuration function for user code.
- This function is called at the very end of Spacemacs initialization after
+This function is called at the very end of Spacemacs initialization after
 layers configuration. You are free to put any user code."
   ;; Silence some js2-mode errors (instead lint with eslint)
   (setq-default js2-strict-trailing-comma-warning nil)
@@ -259,7 +266,10 @@ layers configuration. You are free to put any user code."
   (fset 'evil-visual-update-x-selection 'ignore)
   ;; Set powerline separators
   (setq powerline-default-separator 'arrow)
+  ;; Load custom themes (not included in spacemacs)
+  ;; (load-theme 'andreas t)
   ;; Enable line numbers as default in some modes
+  (setq flycheck-checker-error-threshold 700)
   ;;(add-to-hooks #'linum-mode '(js2-mode-hook))
   ;; Add web-mode as default when working with php files
   (add-to-list 'auto-mode-alist '("\\.php\\'" . web-mode))
@@ -284,6 +294,11 @@ layers configuration. You are free to put any user code."
   (setq neo-vc-integration nil)
   ;; set fringe style to minimal (1px by 1px)
   (fringe-mode '(1 . 1))
+  ;; Try to fix heavy font-locks on large buffers
+  ;; Try to speed up js2-mode
+  ;; (setq js2-idle-timer-delay 2)
+  (setq blink-matching-paren nil)
+  ;;(setq font-lock-maximum-decoration nil)
   ;; Map keys to user customer functions [Use `m` for namespacing]
   ;; File related
   (evil-leader/set-key (kbd "omc") 'u/add-current-file-name)
@@ -291,7 +306,7 @@ layers configuration. You are free to put any user code."
   ;; Search related
   (evil-leader/set-key (kbd "omd") 'u/search-spacemacs-docs)
   ;; Git related
-  (evil-leader/set-key (kbd "omx") 'magit-blame-quit)
+  (evil-leader/set-key (kbd "ogx") 'magit-blame-quit)
   ;; Evalute JavaScript
   (evil-leader/set-key (kbd "oe") 'u/node-eval)
   ;; Buffer related (should be under o directly)
@@ -304,3 +319,19 @@ layers configuration. You are free to put any user code."
 
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   (quote
+    ("8e997c790c6b22c091edb8a866f545857eaae227a0c41df402711f6ebc70326c" "c712d616ea5a9ef4e513681846eb908728bbb087c2d251ded8374ee9faafa199" "989b6cb60e97759d7c45d65121f43b746aff298b5cf8dcf5cfd19c03830b83e9" "f211f8db2328fb031908c9496582e7de2ae8abd5f59a27b4c1218720a7d11803" "2c73700ef9c2c3aacaf4b65a7751b8627b95a1fd8cebed8aa199f2afb089a85f" default))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(default ((t (:family "M+ 1mn" :foundry "nil" :slant normal :weight normal :height 141 :width normal))))
+ '(company-tooltip-common ((t (:inherit company-tooltip :weight bold :underline nil))))
+ '(company-tooltip-common-selection ((t (:inherit company-tooltip-selection :weight bold :underline nil)))))
