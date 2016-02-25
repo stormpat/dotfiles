@@ -1,9 +1,6 @@
 ;; -*- mode: emacs-lisp -*-
 
 (defun dotspacemacs/layers ()
-  "Configuration Layers declaration.
-   You should not put any user code in this function besides modifying the variable
-   values."
   (setq-default
    ;; Base distribution to use. This is a layer contained in the directory
    ;; `+distribution'. For now available distributions are `spacemacs-base'
@@ -18,6 +15,7 @@
    '(
      better-defaults
      emacs-lisp
+     markdown
      evil-commentary
      evil-snipe
      vim-empty-lines
@@ -28,12 +26,9 @@
      php
      (auto-completion
       :variables
-      auto-completion-private-snippets-directory "~/.emacs.d/private/snippets/yasnippet-snippets"
       auto-completion-enable-sort-by-usage t
-      auto-completion-enable-snippets-in-popup nil
       auto-completion-enable-help-help-tooltip nil)
      (syntax-checking :variables syntax-checking-enable-by-default nil)
-     ;; version-control issue = #4534
      html
  )
    ;; List of additional packages that will be installed without being
@@ -42,8 +37,6 @@
    ;; configuration in `dotspacemacs/user-config'.
    dotspacemacs-additional-packages
    '(
-     js-comint
-     nodejs-repl
      (eclipse-theme :location
                     (recipe :fetcher github
                             :repo "abo-abo/eclipse-theme"))
@@ -75,7 +68,6 @@ values."
    ;; Possible values are: `recents' `bookmarks' `projects'.
    dotspacemacs-startup-lists '(recents projects)
    dotspacemacs-startup-recent-list-size 5
-   dotspacemacs-themes '(eclipse spacemacs-dark default)
    ;; If non nil the cursor color matches the state color in GUI Emacs.
    dotspacemacs-colorize-cursor-according-to-state t
    ;; Approved: M+ 2m, M+ 1mn, Fira Mono, CamingoCode, Monoid, Aurulent Sans Mono,  Menlo, Meslo LG S DZ
@@ -161,7 +153,6 @@ values."
   ;; Limit kill ring to 10 items
   (setq kill-ring-max 10)
   ;; Weird error (https://github.com/syl20bnr/spacemacs/issues/3920)
-  (setq exec-path-from-shell-arguments '("-l")))
 
 (defun dotspacemacs/user-config ()
   "Configuration function for user code.
@@ -170,11 +161,6 @@ values."
   ;; Silence js2-mode errors (instead lint with eslint)
   ;; (setq-default js2-strict-trailing-comma-warning nil)
   ;; (setq js2-highlight-external-variables nil)
-  (setq js2-mode-show-parse-errors nil)
-  (setq js2-mode-show-strict-warnings nil)
-  ;; Nodejs / comint evalutation
-  (setq inferior-js-program-command "node")
-  (setenv "NODE_NO_READLINE" "1")
   ;; Make which-key more snappy
   (setq which-key-idle-delay 0.01)
   (setq which-key-idle-secondary-delay 0.01)
@@ -188,26 +174,19 @@ values."
   (setq frame-title-format "M-x")
   ;; Paste behaviour
   (fset 'evil-visual-update-x-selection 'ignore)
-  ;; Set powerline separators
   (setq powerline-default-separator 'arrow)
-  ;; Enable line numbers as default in some modes
   (setq flycheck-checker-error-threshold 400)
   ;;(add-to-hooks #'linum-mode '(js2-mode-hook))
-  ;; Add web-mode as default when working with php files
   (add-to-list 'auto-mode-alist '("\\.php\\'" . web-mode))
   (setq-default company-idle-delay 0.0)
   ;; Set indents to two spaces, override some defaults.
-  (setq-default js2-basic-offset 2)
   (setq-default css-indent-offset 2)
   (setq-default web-mode-markup-indent-offset 2)
   (setq tab-width 2)
-  (setq-default flycheck-jshintrc "~/.jshintrc")
-  (setq-default flycheck-jscsrc "~/.jscsrc")
   ;; Initialize web-mode custom hooks
   (add-hook 'web-mode-hook 'stormpat/web-mode-hook)
   ;; Set helm ignore folders
   ;;(add-to-list 'projectile-ignored-directories "node_modules")
-  ;; testing on osx pbpaste
   (setq x-select-enable-clipboard t)
   ;; Disable neotree vc-integration -> spacemacs/issues/2943
   (setq neo-vc-integration nil)
