@@ -21,14 +21,17 @@
      vim-empty-lines
      (javascript :variables javascript t)
      git
-     sql
      react
+     org
      php
+     (python
+      :variables python-enable-yapf-format-on-save t)
      (auto-completion
       :variables
       auto-completion-enable-sort-by-usage t
       auto-completion-enable-help-help-tooltip nil)
      (syntax-checking :variables syntax-checking-enable-by-default nil)
+     version-control ;; watch out for issue = #4534
      html
  )
    ;; List of additional packages that will be installed without being
@@ -37,6 +40,8 @@
    ;; configuration in `dotspacemacs/user-config'.
    dotspacemacs-additional-packages
    '(
+     ;;js-comint
+     ;;nodejs-repl
      (eclipse-theme :location
                     (recipe :fetcher github
                             :repo "abo-abo/eclipse-theme"))
@@ -68,6 +73,7 @@ values."
    ;; Possible values are: `recents' `bookmarks' `projects'.
    dotspacemacs-startup-lists '(recents projects)
    dotspacemacs-startup-recent-list-size 5
+   dotspacemacs-themes '(spacemacs-light eclipse)
    ;; If non nil the cursor color matches the state color in GUI Emacs.
    dotspacemacs-colorize-cursor-according-to-state t
    ;; Approved: M+ 2m, M+ 1mn, Fira Mono, CamingoCode, Monoid, Aurulent Sans Mono,  Menlo, Meslo LG S DZ
@@ -129,6 +135,12 @@ values."
   (setq-default web-mode-markup-indent-offset 2)
   )
 
+;; (defun stormpat/enable-eslint-disable-jshint ()
+;;   "Always use eslint instead of jshint"
+;;   (progn
+;;     (flycheck-add-mode 'javascript-eslint 'js2-mode)
+;;     (push 'javascript-jshint flycheck-disabled-checkers)))
+
 ;; Print the current file name to the buffer.
 (defun u/add-current-file-name ()
   "Insert the full path file name into the current buffer."
@@ -153,6 +165,9 @@ values."
   ;; Limit kill ring to 10 items
   (setq kill-ring-max 10)
   ;; Weird error (https://github.com/syl20bnr/spacemacs/issues/3920)
+  (setq exec-path-from-shell-arguments '("-l"))
+  )
+
 
 (defun dotspacemacs/user-config ()
   "Configuration function for user code.
@@ -161,6 +176,28 @@ values."
   ;; Silence js2-mode errors (instead lint with eslint)
   ;; (setq-default js2-strict-trailing-comma-warning nil)
   ;; (setq js2-highlight-external-variables nil)
+
+  ;; Python lint setup.
+  (setq flycheck-python-pylint-executable "pylint")
+  (add-hook 'python-mode-hook (lambda ()
+                                (flycheck-mode 1)
+                                (semantic-mode 1)
+                                (setq flycheck-checker 'python-pylint
+                                      flycheck-checker-error-threshold 900
+                                      flycheck-pylintrc "~/.pylintrc")))
+  ;; Use eslint instead of jshint
+  (require 'flycheck)
+  (setq flycheck-checkers '(javascript-eslint))
+  (setq-default flycheck-disabled-checkers
+                (append flycheck-disabled-checkers
+                        '(javascript-jshint)))
+  (flycheck-add-mode 'javascript-eslint 'js2-mode)
+
+  ;; (setq js2-mode-show-parse-errors nil)
+  ;; (setq js2-mode-show-strict-warnings nil)
+  ;; Nodejs / comint evalutation (uncommen if using comint/node)
+  ;;(setq inferior-js-program-command "node")
+  ;;(setenv "NODE_NO_READLINE" "1")
   ;; Make which-key more snappy
   (setq which-key-idle-delay 0.01)
   (setq which-key-idle-secondary-delay 0.01)
@@ -180,14 +217,21 @@ values."
   (add-to-list 'auto-mode-alist '("\\.php\\'" . web-mode))
   (setq-default company-idle-delay 0.0)
   ;; Set indents to two spaces, override some defaults.
+  ;; (setq-default js2-basic-offset 2)
+  (setq-default js-indent-level 2)
   (setq-default css-indent-offset 2)
   (setq-default web-mode-markup-indent-offset 2)
   (setq tab-width 2)
+  ;; (setq-default flycheck-jshintrc "~/.jshintrc")
+  ;; (setq-default flycheck-jscsrc "~/.jscsrc")
   ;; Initialize web-mode custom hooks
   (add-hook 'web-mode-hook 'stormpat/web-mode-hook)
   ;; Set helm ignore folders
   ;;(add-to-list 'projectile-ignored-directories "node_modules")
+  ;; Some tweaks to get better behaviour on osx. (GNU Emacs 25.1.xxx)
   (setq x-select-enable-clipboard t)
+  (setq mac-option-modifier nil
+        mac-command-modifier 'meta)
   ;; Disable neotree vc-integration -> spacemacs/issues/2943
   (setq neo-vc-integration nil)
   ;; Try to fix heavy font-locks on large buffers
@@ -225,6 +269,9 @@ values."
  '(custom-safe-themes
    (quote
     ("fa2b58bb98b62c3b8cf3b6f02f058ef7827a8e497125de0254f56e373abee088" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" "ed58c97cceaa93c5b77dae669ae8c984295e440ac52aff10539134c8bd7568fe" default)))
+ '(package-selected-packages
+   (quote
+    (with-editor async dash toc-org org-repo-todo org-present org-pomodoro org-plus-contrib org-bullets htmlize gnuplot git-gutter-fringe+ git-gutter-fringe git-gutter+ git-gutter diff-hl packed smartparens projectile helm helm-core multiple-cursors json-reformat magit spinner pythonic mmm-mode markdown-toc markdown-mode gh-md pyvenv pytest pyenv-mode pip-requirements hy-mode helm-pydoc cython-mode company-anaconda anaconda-mode ws-butler window-numbering web-mode web-beautify volatile-highlights tagedit sql-indent spacemacs-theme smooth-scrolling smeargle slim-mode scss-mode sass-mode restart-emacs rainbow-delimiters popwin phpunit phpcbf php-extras php-auto-yasnippets persp-mode pcre2el paradox page-break-lines orgit open-junk-file nodejs-repl neotree move-text magit-gitflow macrostep lorem-ipsum linum-relative leuven-theme less-css-mode json-mode js2-refactor js2-mode js-doc js-comint jade-mode info+ indent-guide ido-vertical-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-gitignore helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag haml-mode google-translate golden-ratio gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger flycheck-pos-tip flycheck flx-ido fill-column-indicator fancy-battery expand-region exec-path-from-shell evil-visualstar evil-tutor evil-surround evil-snipe evil-search-highlight-persist evil-numbers evil-mc evil-matchit evil-magit evil-lisp-state evil-jumper evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-commentary evil-args evil-anzu eval-sexp-fu emmet-mode elisp-slime-nav drupal-mode define-word company-web company-tern company-statistics company-quickhelp company coffee-mode clean-aindent-mode buffer-move bracketed-paste auto-yasnippet auto-highlight-symbol auto-compile aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line ac-ispell quelpa package-build use-package which-key bind-key bind-map evil eclipse-theme)))
  '(sql-connection-alist
    (quote
     (("innovoice"
