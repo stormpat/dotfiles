@@ -1,7 +1,7 @@
 " @stormpat's Vim config.
 
-"" Plugins
 call plug#begin('~/.vim/plugged')
+" Theme
 Plug 'rakr/vim-one'
 
 " General coding helpers
@@ -12,6 +12,8 @@ Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
 " Productivity boosters
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
+Plug 'mattn/emmet-vim'
+Plug 'terryma/vim-multiple-cursors'
 
 " Search and discovery
 Plug 'mhinz/vim-startify'
@@ -58,8 +60,10 @@ call plug#end()
 "" Base settings
 "
 let mapleader = "\<Space>"
+
 syntax on
 filetype plugin on
+
 set nocompatible
 set number
 set relativenumber
@@ -82,7 +86,7 @@ set ruler
 set hidden
 "set nowrap
 "set formatoptions-=t
-"set laststatus=2
+set laststatus=2
 set scrolloff=10
 set nostartofline
 
@@ -90,14 +94,23 @@ set undodir=~/.vim/undo/
 set backupdir=~/.vim/backup/
 set directory=~/.vim/swp/
 
-"" Automatically closing braces
+" Statusline
+set statusline=
+set statusline+=%#PmenuSel#
+set statusline+=%#LineNr#
+set statusline+=\ %f
+set statusline+=%m\
+set statusline+=%=
+set statusline+=%#CursorColumn#
+set statusline+=\ %y
+set statusline+=\ %{&fileencoding?&fileencoding:&encoding}
+set statusline+=\[%{&fileformat}\]
+set statusline+=\ %p%%
+set statusline+=\ %l:%c
+set statusline+=\ 
 
-"inoremap {<CR> {<CR>}<Esc>ko<Esc>
-"inoremap [<CR> [<CR>]<Esc>ko<Esc>
-"inoremap (<CR> (<CR>)<Esc>ko<Esc>
-
+" Make one off macros faster
 nnoremap Q @q " qq to record, Q to replay
-
 
 if has('gui_running')
   " Turn off them scrollbars
@@ -121,9 +134,7 @@ endif
 
 
 "" Autocommands
-""
-"autocmd BufEnter * silent! lcd %:p:h
-"autocmd BufEnter * call <SID>AutoProjectRootCD() " Use project root as a default.
+" *** dust ***
 
 "" Movement
 nnoremap j gj
@@ -138,29 +149,10 @@ nnoremap <C-K> <C-W><C-K> " Jump to buffer above
 nnoremap <C-L> <C-W><C-L> " Jump to buffer on right
 nnoremap <C-H> <C-W><C-H> " Jump to buffer on left
 
-
-":nnoremap <leader>hn :GitGutterNextHunk<CR>
-":nnoremap <leader>hp :GitGutterPrevHunk<CR>
-
-"" Moving lines
-""
-"nnoremap <silent> <C-k> :move-2<cr>
-"nnoremap <silent> <C-j> :move+<cr>
-"nnoremap <silent> <C-h> <<
-"nnoremap <silent> <C-l> >>
-"xnoremap <silent> <C-k> :move-2<cr>gv
-"xnoremap <silent> <C-j> :move'>+<cr>gv
-"xnoremap <silent> <C-h> <gv
-"xnoremap <silent> <C-l> >gv
-"xnoremap < <gv
-"xnoremap > >gv
-
 "" Searches
-command! ProjectFiles execute 'GFiles' s:find_git_root()
-
 :nnoremap <silent> <leader>sc :nohlsearch<CR>
 :nnoremap <leader>sf :Files<CR>
-:nnoremap <leader>sp :ProjectFiles<CR>
+:nnoremap <leader>sp :GFiles<CR>
 :nnoremap <leader>sb :Lines<CR>
 
 
@@ -173,6 +165,8 @@ command! ProjectFiles execute 'GFiles' s:find_git_root()
 
 "" Productivity
 :command W w
+:command Q q
+
 :command OpenJournal :e ~/Dropbox/Journal
 ":inoremap <Tab> <C-R>=Tab_Or_Complete()<CR>| " Autocomplete with tab
 
@@ -194,10 +188,9 @@ nnoremap <silent> K :call <SID>show_documentation()<CR>
         
 
 "" Buffers
-:nnoremap <Tab> :bnext<CR> " Tab goes to next buffer
-:nnoremap <S-Tab> :bprevious<CR> " Shift-Tab go go to previous buffer
-:nnoremap <Leader>bb :Buffers<CR> " Show FZF buffer list
-
+:nnoremap <Tab> :bnext<CR>
+:nnoremap <S-Tab> :bprevious<CR>
+:nnoremap <Leader>bb :Buffers<CR> 
 
 "" Autocomplete
 "set completeopt=longest,menuone
@@ -234,3 +227,5 @@ autocmd BufNewFile,BufRead *.view.php setlocal formatprg=prettier\ --parser="htm
 "let g:ack_default_options = " --case-sensitive --noheading --nopager --nocolor --nogroup --column" 
 
 "command! -nargs=1 Ag execute "Ack! <args> " . s:find_git_root()
+
+
