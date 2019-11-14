@@ -14,6 +14,7 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
 Plug 'mattn/emmet-vim'
 Plug 'terryma/vim-multiple-cursors'
+Plug 'easymotion/vim-easymotion'
 
 " Search and discovery
 Plug 'mhinz/vim-startify'
@@ -64,6 +65,8 @@ let mapleader = "\<Space>"
 syntax on
 filetype plugin on
 
+set encoding=utf8
+set ffs=unix,dos,mac
 set nocompatible
 set number
 set relativenumber
@@ -71,6 +74,9 @@ set path=+=**
 set expandtab
 set autoindent
 set smarttab
+set autoread
+set ignorecase
+set smartcase
 "set backspace=indent,eol,start
 "set complete-=i
 set tabstop=4
@@ -89,6 +95,15 @@ set hidden
 set laststatus=2
 set scrolloff=10
 set nostartofline
+
+set noerrorbells
+set novisualbell
+set t_vb=
+set tm=500
+
+if has("gui_macvim")
+    autocmd GUIEnter * set vb t_vb=
+endif
 
 set undodir=~/.vim/undo/
 set backupdir=~/.vim/backup/
@@ -126,7 +141,9 @@ if has('gui_running')
   augroup END
 
   let g:one_allow_italics = 1
-  set guifont=Hack:h12
+  " set guifont=Hack:h12
+ "  set guifont=IBM\ Plex\ Mono:h12
+   set guifont=SF\ Mono:h12
   set background=dark
   " set termguicolors
   " set t_Co=256
@@ -167,8 +184,17 @@ nnoremap <C-H> <C-W><C-H> " Jump to buffer on left
 :command W w
 :command Q q
 
+:nnoremap cw ciw
+:nnoremap dw diw
+:nnoremap vw viw
+
 :command OpenJournal :e ~/Dropbox/Journal
 ":inoremap <Tab> <C-R>=Tab_Or_Complete()<CR>| " Autocomplete with tab
+
+" Up and down in autocomplete boxes
+" Annoying as HELL. CAnnot search for 'k' and 'j'
+" inoremap <expr> j ((pumvisible())?("\<C-n>"):("j"))
+" inoremap <expr> k ((pumvisible())?("\<C-p>"):("k"))
 
 "" Coc 
 nmap <silent> gd <Plug>(coc-definition)
@@ -185,7 +211,13 @@ function! s:show_documentation()
 endfunction
 
 nnoremap <silent> K :call <SID>show_documentation()<CR>
-        
+
+"" Easymotion
+map <Leader>L <Plug>(easymotion-bd-jk)
+nmap <Leader>L <Plug>(easymotion-overwin-line)
+
+map  <Leader>w <Plug>(easymotion-bd-w)
+nmap <Leader>w <Plug>(easymotion-overwin-w)
 
 "" Buffers
 :nnoremap <Tab> :bnext<CR>
