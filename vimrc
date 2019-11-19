@@ -1,8 +1,14 @@
-" @stormpat's Vim config.
+" @stormpat's Vim config
 
 call plug#begin('~/.vim/plugged')
 " Theme
 Plug 'rakr/vim-one'
+Plug 'morhetz/gruvbox'
+Plug 'tomasiser/vim-code-dark'
+Plug 'itchyny/lightline.vim'
+
+" Version control
+Plug 'airblade/vim-gitgutter'
 
 " General coding helpers
 Plug 'dense-analysis/ale'
@@ -38,14 +44,6 @@ call plug#end()
 "endfunction
 
 
-"function! Tab_Or_Complete()
-"  if col('.')>1 && strpart( getline('.'), col('.')-2, 3 ) =~ '^\w'
-"    return "\<C-N>"
-"  else
-"    return "\<Tab>"
-"  endif
-"endfunction
-
 
 "function! <SID>AutoProjectRootCD()
 "  try
@@ -59,11 +57,12 @@ call plug#end()
 "
 
 "" Base settings
-"
 let mapleader = "\<Space>"
 
 syntax on
 filetype plugin on
+
+colorscheme gruvbox
 
 set encoding=utf8
 set ffs=unix,dos,mac
@@ -77,8 +76,6 @@ set smarttab
 set autoread
 set ignorecase
 set smartcase
-"set backspace=indent,eol,start
-"set complete-=i
 set tabstop=4
 set shiftwidth=4
 set softtabstop=0
@@ -90,8 +87,7 @@ set incsearch
 set hlsearch 
 set ruler
 set hidden
-"set nowrap
-"set formatoptions-=t
+set nowrap
 set laststatus=2
 set scrolloff=10
 set nostartofline
@@ -100,10 +96,6 @@ set noerrorbells
 set novisualbell
 set t_vb=
 set tm=500
-
-if has("gui_macvim")
-    autocmd GUIEnter * set vb t_vb=
-endif
 
 set undodir=~/.vim/undo/
 set backupdir=~/.vim/backup/
@@ -127,31 +119,29 @@ set statusline+=\
 " Make one off macros faster
 nnoremap Q @q " qq to record, Q to replay
 
-if has('gui_running')
+" if has('gui_vimr')
   " Turn off them scrollbars
-  set guioptions-=L
-  set guioptions-=R
-  set guioptions-=b
-  set guioptions-=l
-  set guioptions-=r
+  " set guioptions-=L
+  " set guioptions-=R
+  " set guioptions-=b
+  " set guioptions-=l
+  " set guioptions-=r
   
-  augroup RCVisual
-      autocmd!
-      autocmd GUIEnter * colorscheme one
-  augroup END
+  " augroup RCVisual
+  "     autocmd!
+  "     autocmd GUIEnter * colorscheme gruvbox
+  " augroup END
 
-  let g:one_allow_italics = 1
+  " set guifont=Roboto\ Mono:h12
   " set guifont=Hack:h12
- "  set guifont=IBM\ Plex\ Mono:h12
-   set guifont=SF\ Mono:h12
-  set background=dark
-  " set termguicolors
-  " set t_Co=256
-endif
+  " set guifont=SF\ Mono:h12
+  " set guifont=IBM\ Plex\ Mono:h12
+" elseif &t_Co == 256
+"     set termguicolors
+" "     colorscheme codedark
+" endif
 
 
-"" Autocommands
-" *** dust ***
 
 "" Movement
 nnoremap j gj
@@ -178,18 +168,32 @@ nnoremap <C-H> <C-W><C-H> " Jump to buffer on left
 
 "" Files
 :nnoremap <leader>rc :e ~/.vimrc<CR>
-:nnoremap <Leader>rr :source $MYVIMRC<CR>
+:nnoremap <Leader>rr :source ~/dotfiles/vimrc<CR>
 
 "" Productivity
-:command W w
-:command Q q
+:command! W w
+:command! Q q
 
 :nnoremap cw ciw
 :nnoremap dw diw
 :nnoremap vw viw
 
-:command OpenJournal :e ~/Dropbox/Journal
-":inoremap <Tab> <C-R>=Tab_Or_Complete()<CR>| " Autocomplete with tab
+:command! OpenJournal :e ~/Dropbox/Journal
+
+" function! Tab_OrComplete()
+"   if col('.')>1 && strpart( getline('.'), col('.')-2, 3 ) =~ '^\w'
+"     return "\<C-N>"
+"   else
+"     return "\<Tab>"
+"   endif
+" endfunction
+
+" :inoremap <Tab> <C-R>=Tab_Or_Complete()<CR>
+
+" :inoremap <C-j> <Down>   
+" :inoremap <C-k> <Up>
+" :inoremap <C-h> <Left>
+" :inoremap <C-l> <Right>
 
 " Up and down in autocomplete boxes
 " Annoying as HELL. CAnnot search for 'k' and 'j'
@@ -219,18 +223,22 @@ nmap <Leader>L <Plug>(easymotion-overwin-line)
 map  <Leader>w <Plug>(easymotion-bd-w)
 nmap <Leader>w <Plug>(easymotion-overwin-w)
 
+
+"" Gitgutter
+nmap gk <Plug>(GitGutterNextHunk)
+nmap gj <Plug>(GitGutterPrevHunk)
+
+
 "" Buffers
 :nnoremap <Tab> :bnext<CR>
 :nnoremap <S-Tab> :bprevious<CR>
 :nnoremap <Leader>bb :Buffers<CR> 
 
-"" Autocomplete
-"set completeopt=longest,menuone
-
-
-"" TypeScript
+"" TypeScript / JavscScript
 "
 autocmd FileType typescript setlocal formatprg=prettier\ --parser\ typescript
+autocmd Filetype typescript setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
+autocmd Filetype javascript setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
 
 "" PHP
 "
