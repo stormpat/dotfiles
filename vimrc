@@ -9,11 +9,12 @@ Plug 'itchyny/lightline.vim'
 
 " Version control
 Plug 'airblade/vim-gitgutter'
+Plug 'tpope/vim-fugitive'
 
 " General coding helpers
 Plug 'dense-analysis/ale'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
+Plug 'prettier/vim-prettier', {'do': 'yarn install'}
 
 " Productivity boosters
 Plug 'tpope/vim-surround'
@@ -31,6 +32,7 @@ Plug 'junegunn/fzf.vim'
 " Languages
 Plug 'leafgarland/typescript-vim'
 Plug 'ianks/vim-tsx'
+Plug 'fatih/vim-go'
 call plug#end()
 
 " Functions
@@ -91,8 +93,12 @@ set nowrap
 set laststatus=2
 set scrolloff=10
 set nostartofline
+set nohlsearch
 
-set noerrorbells
+" Info shown in lightline
+set noshowmode
+
+ret noerrorbells
 set novisualbell
 set t_vb=
 set tm=500
@@ -101,25 +107,20 @@ set undodir=~/.vim/undo/
 set backupdir=~/.vim/backup/
 set directory=~/.vim/swp/
 
-" Statusline
-set statusline=
-set statusline+=%#PmenuSel#
-set statusline+=%#LineNr#
-set statusline+=\ %f
-set statusline+=%m\
-set statusline+=%=
-set statusline+=%#CursorColumn#
-set statusline+=\ %y
-set statusline+=\ %{&fileencoding?&fileencoding:&encoding}
-set statusline+=\[%{&fileformat}\]
-set statusline+=\ %p%%
-set statusline+=\ %l:%c
-set statusline+=\ 
+" Lightline
+let g:lightline = {
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ],
+      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+      \ },
+      \ 'component_function': {
+      \   'gitbranch': 'fugitive#head'
+      \ },
+      \ }
 
 " Make one off macros faster
 nnoremap Q @q " qq to record, Q to replay
 
-" if has('gui_vimr')
   " Turn off them scrollbars
   " set guioptions-=L
   " set guioptions-=R
@@ -141,8 +142,6 @@ nnoremap Q @q " qq to record, Q to replay
 " "     colorscheme codedark
 " endif
 
-
-
 "" Movement
 nnoremap j gj
 nnoremap k gk
@@ -163,10 +162,13 @@ nnoremap <C-H> <C-W><C-H> " Jump to buffer on left
 :nnoremap <leader>sb :Lines<CR>
 
 
+
+
 " command! GrepProjectFiles execute 'cd' s:find_git_root() | :Rg
 " command! -nargs=1 ProjectGrep call s:grep_project_file(<f-args>)
 
 "" Files
+:nnoremap <leader>ft :Sexplore<CR>
 :nnoremap <leader>rc :e ~/.vimrc<CR>
 :nnoremap <Leader>rr :source ~/dotfiles/vimrc<CR>
 
@@ -217,8 +219,8 @@ endfunction
 nnoremap <silent> K :call <SID>show_documentation()<CR>
 
 "" Easymotion
-map <Leader>L <Plug>(easymotion-bd-jk)
-nmap <Leader>L <Plug>(easymotion-overwin-line)
+map <Leader>l <Plug>(easymotion-bd-jk)
+" nmap <Leader>L <Plug>(easymotion-overwin-line)
 
 map  <Leader>w <Plug>(easymotion-bd-w)
 nmap <Leader>w <Plug>(easymotion-overwin-w)
@@ -242,17 +244,18 @@ autocmd Filetype javascript setlocal expandtab tabstop=2 shiftwidth=2 softtabsto
 
 "" PHP
 "
-autocmd BufNewFile,BufRead *.php setlocal formatprg="prettier\ --parser="php"
+autocmd BufNewFile,BufRead *.php setlocal formatprg="prettier\ --parser=php"
 autocmd FileType php let b:prettier_ft_default_args = {'parser': 'php'} 
 autocmd BufNewFile,BufRead *.view.php setlocal ft=html
-autocmd BufNewFile,BufRead *.view.php setlocal formatprg=prettier\ --parser="html"
+autocmd BufNewFile,BufRead *.view.php setlocal formatprg="prettier\ --parser=html"
 
 "" HACK
 "" nnoremap gp :silent %!prettier --stdin --stdin-filepath % --trailing-comma all --single-quote<CR>
-"" let g:prettier#autoformat = 0
-"" let g:prettier#exec_cmd_async = 1
+let g:prettier#autoformat = 0
+let g:prettier#exec_cmd_async = 1
+let g:prettier#exec_cmd_path = "/usr/local/bin/prettier"
 
-"" nnoremap <leader>p %! ~/dev/innovoice/node_modules/.bin/prettier --parser="html"<CR>
+" rnnoremap <leader>p %! ~/dev/innovoice/node_modules/.bin/prettier --parser="html"<CR>
 
 "let g:syntastic_always_populate_loc_list = 1
 "let g:syntastic_auto_loc_list = 1
