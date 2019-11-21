@@ -35,29 +35,6 @@ Plug 'ianks/vim-tsx'
 Plug 'fatih/vim-go'
 call plug#end()
 
-" Functions
-" 
-" function! s:find_git_root()
-"   return system('git rev-parse --show-toplevel 2> /dev/null')[:-2]
-" endfunction
-
-"function! s:grep_project_file(...)
-"  execute 'cd' s:find_git_root() | :Rg a:0
-"endfunction
-
-
-
-"function! <SID>AutoProjectRootCD()
-"  try
-"    if &ft != 'help'
-"      ProjectRootCD
-"    endif
-"  catch
-"    " Silently ignore invalid buffers
-"  endtry
-"endfunction
-"
-
 "" Base settings
 let mapleader = "\<Space>"
 
@@ -67,6 +44,8 @@ filetype plugin on
 colorscheme gruvbox
 
 set encoding=utf8
+set cmdheight=2
+set signcolumn=yes
 set ffs=unix,dos,mac
 set nocompatible
 set number
@@ -121,27 +100,6 @@ let g:lightline = {
 " Make one off macros faster
 nnoremap Q @q " qq to record, Q to replay
 
-  " Turn off them scrollbars
-  " set guioptions-=L
-  " set guioptions-=R
-  " set guioptions-=b
-  " set guioptions-=l
-  " set guioptions-=r
-  
-  " augroup RCVisual
-  "     autocmd!
-  "     autocmd GUIEnter * colorscheme gruvbox
-  " augroup END
-
-  " set guifont=Roboto\ Mono:h12
-  " set guifont=Hack:h12
-  " set guifont=SF\ Mono:h12
-  " set guifont=IBM\ Plex\ Mono:h12
-" elseif &t_Co == 256
-"     set termguicolors
-" "     colorscheme codedark
-" endif
-
 "" Movement
 nnoremap j gj
 nnoremap k gk
@@ -161,9 +119,6 @@ nnoremap <C-H> <C-W><C-H> " Jump to buffer on left
 :nnoremap <leader>sp :GFiles<CR>
 :nnoremap <leader>sb :Lines<CR>
 
-" command! GrepProjectFiles execute 'cd' s:find_git_root() | :Rg
-" command! -nargs=1 ProjectGrep call s:grep_project_file(<f-args>)
-
 "" Files
 :nnoremap <leader>ft :Sexplore<CR>
 :nnoremap <leader>rc :e ~/.vimrc<CR>
@@ -179,31 +134,13 @@ nnoremap <C-H> <C-W><C-H> " Jump to buffer on left
 
 :command! OpenJournal :e ~/Dropbox/Journal
 
-" function! Tab_OrComplete()
-"   if col('.')>1 && strpart( getline('.'), col('.')-2, 3 ) =~ '^\w'
-"     return "\<C-N>"
-"   else
-"     return "\<Tab>"
-"   endif
-" endfunction
-
-" :inoremap <Tab> <C-R>=Tab_Or_Complete()<CR>
-
-" :inoremap <C-j> <Down>   
-" :inoremap <C-k> <Up>
-" :inoremap <C-h> <Left>
-" :inoremap <C-l> <Right>
-
-" Up and down in autocomplete boxes
-" Annoying as HELL. CAnnot search for 'k' and 'j'
-" inoremap <expr> j ((pumvisible())?("\<C-n>"):("j"))
-" inoremap <expr> k ((pumvisible())?("\<C-p>"):("k"))
-
 "" Coc 
 nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
+
+nmap <silent> cdg <Plug>(coc-diagnostic-prev)
 
 function! s:show_documentation()
   if (index(['vim','help'], &filetype) >= 0)
@@ -214,6 +151,17 @@ function! s:show_documentation()
 endfunction
 
 nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
 
 "" Easymotion
 map <Leader>l <Plug>(easymotion-bd-jk)
