@@ -2,9 +2,7 @@
 
 call plug#begin('~/.vim/plugged')
 " Theme
-Plug 'rakr/vim-one'
 Plug 'morhetz/gruvbox'
-Plug 'tomasiser/vim-code-dark'
 Plug 'itchyny/lightline.vim'
 
 " Version control
@@ -18,8 +16,6 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 " Productivity boosters
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
-Plug 'mattn/emmet-vim'
-Plug 'terryma/vim-multiple-cursors'
 Plug 'easymotion/vim-easymotion'
 Plug 'alvan/vim-closetag'
 
@@ -162,6 +158,13 @@ function! s:check_back_space() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
+
+" LSP extensions
+let g:coc_global_extensions = ['coc-tsserver',
+                              \'coc-prettier',
+                              \'coc-emmet',
+                              \'coc-phpls',
+                              \ ]
 
 "" Easymotion
 map <Leader>l <Plug>(easymotion-bd-jk)
