@@ -14,7 +14,6 @@ Plug 'tpope/vim-fugitive'
 " General coding helpers
 Plug 'dense-analysis/ale'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'prettier/vim-prettier', {'do': 'yarn install'}
 
 " Productivity boosters
 Plug 'tpope/vim-surround'
@@ -22,6 +21,7 @@ Plug 'tpope/vim-commentary'
 Plug 'mattn/emmet-vim'
 Plug 'terryma/vim-multiple-cursors'
 Plug 'easymotion/vim-easymotion'
+Plug 'alvan/vim-closetag'
 
 " Search and discovery
 Plug 'mhinz/vim-startify'
@@ -161,9 +161,6 @@ nnoremap <C-H> <C-W><C-H> " Jump to buffer on left
 :nnoremap <leader>sp :GFiles<CR>
 :nnoremap <leader>sb :Lines<CR>
 
-
-
-
 " command! GrepProjectFiles execute 'cd' s:find_git_root() | :Rg
 " command! -nargs=1 ProjectGrep call s:grep_project_file(<f-args>)
 
@@ -220,16 +217,18 @@ nnoremap <silent> K :call <SID>show_documentation()<CR>
 
 "" Easymotion
 map <Leader>l <Plug>(easymotion-bd-jk)
-" nmap <Leader>L <Plug>(easymotion-overwin-line)
-
-map  <Leader>w <Plug>(easymotion-bd-w)
+map <Leader>w <Plug>(easymotion-bd-w)
 nmap <Leader>w <Plug>(easymotion-overwin-w)
 
+" Closetag
+let g:closetag_filenames = '*.html,*.xhtml,*.view.php'
+
+" Tidy (http://api.html-tidy.org/tidy/quickref_next.html)
+let g:ale_html_tidy_options = '--custom-tags blocklevel --drop-empty-elements no --show-body-only true'
 
 "" Gitgutter
 nmap gk <Plug>(GitGutterNextHunk)
 nmap gj <Plug>(GitGutterPrevHunk)
-
 
 "" Buffers
 :nnoremap <Tab> :bnext<CR>
@@ -237,38 +236,15 @@ nmap gj <Plug>(GitGutterPrevHunk)
 :nnoremap <Leader>bb :Buffers<CR> 
 
 "" TypeScript / JavscScript
-"
-autocmd FileType typescript setlocal formatprg=prettier\ --parser\ typescript
 autocmd Filetype typescript setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
 autocmd Filetype javascript setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
 
+" Prettier (using coc-prettier)
+command! -nargs=0 Prettier :CocCommand prettier.formatFile
+:nnoremap <Leader>P :Prettier<CR> 
+vmap <leader>f <Plug>(coc-format-selected)
+nmap <leader>f <Plug>(coc-format-selected)
+
 "" PHP
-"
-autocmd BufNewFile,BufRead *.php setlocal formatprg="prettier\ --parser=php"
-autocmd FileType php let b:prettier_ft_default_args = {'parser': 'php'} 
 autocmd BufNewFile,BufRead *.view.php setlocal ft=html
-autocmd BufNewFile,BufRead *.view.php setlocal formatprg="prettier\ --parser=html"
-
-"" HACK
-"" nnoremap gp :silent %!prettier --stdin --stdin-filepath % --trailing-comma all --single-quote<CR>
-let g:prettier#autoformat = 0
-let g:prettier#exec_cmd_async = 1
-let g:prettier#exec_cmd_path = "/usr/local/bin/prettier"
-
-" rnnoremap <leader>p %! ~/dev/innovoice/node_modules/.bin/prettier --parser="html"<CR>
-
-"let g:syntastic_always_populate_loc_list = 1
-"let g:syntastic_auto_loc_list = 1
-"let g:syntastic_check_on_open = 1
-"let g:syntastic_check_on_wq = 0
-"let g:syntastic_html_tidy_ignore_errors=["trimming empty <span>", "trimming empty <i>", "trimming empty <button>", "trimming empty <select>"]
-
-
-"" Fzf
-"" Set Ack to ag
-"let g:ackprg = "ag"
-"let g:ack_default_options = " --case-sensitive --noheading --nopager --nocolor --nogroup --column" 
-
-"command! -nargs=1 Ag execute "Ack! <args> " . s:find_git_root()
-
 
