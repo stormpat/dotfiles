@@ -7,7 +7,6 @@ Plug 'itchyny/lightline.vim'
 
 " Version control
 Plug 'airblade/vim-gitgutter'
-" Plug 'tpope/vim-fugitive'
 Plug 'jreybert/vimagit'
 
 " General coding helpers
@@ -37,7 +36,6 @@ let mapleader = "\<Space>"
 
 syntax on
 filetype plugin on
-
 colorscheme gruvbox
 
 set encoding=utf8
@@ -59,7 +57,6 @@ set tabstop=4
 set shiftwidth=4
 set softtabstop=0
 set showcmd
-set cursorline
 set wildmenu 
 set lazyredraw
 set incsearch
@@ -71,6 +68,13 @@ set laststatus=2
 set scrolloff=10
 set nostartofline
 set nohlsearch
+
+" Highlights (see: https://upload.wikimedia.org/wikipedia/commons/1/15/Xterm_256color_chart.svg)
+set colorcolumn=100
+highlight ColorColumn ctermbg=236
+
+set cursorline
+highlight CursorLine ctermbg=236
 
 " Info shown in lightline
 set noshowmode
@@ -88,10 +92,7 @@ set directory=~/.vim/swp/
 let g:lightline = {
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ],
-      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
-      \ },
-      \ 'component_function': {
-      \   'gitbranch': 'fugitive#head'
+      \             [ 'readonly', 'filename', 'modified' ] ]
       \ },
       \ }
 
