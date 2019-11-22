@@ -7,7 +7,8 @@ Plug 'itchyny/lightline.vim'
 
 " Version control
 Plug 'airblade/vim-gitgutter'
-Plug 'tpope/vim-fugitive'
+" Plug 'tpope/vim-fugitive'
+Plug 'jreybert/vimagit'
 
 " General coding helpers
 Plug 'dense-analysis/ale'
@@ -44,6 +45,7 @@ set cmdheight=2
 set signcolumn=yes
 set ffs=unix,dos,mac
 set nocompatible
+set updatetime=300
 set number
 set relativenumber
 set path=+=**
