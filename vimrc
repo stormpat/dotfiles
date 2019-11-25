@@ -32,7 +32,7 @@ Plug 'ianks/vim-tsx'
 Plug 'fatih/vim-go'
 call plug#end()
 
-"" Base settings
+" Base settings
 let mapleader = "\<Space>"
 
 syntax on
@@ -106,7 +106,7 @@ nnoremap  <leader>Y "+yg_
 nnoremap  <leader>y "+y
 nnoremap  <leader>yy "+yy
 
-"" Movement
+" Movement
 nnoremap j gj
 nnoremap k gk
 nnoremap B ^
@@ -129,18 +129,18 @@ inoremap [<CR>  [<CR>]<Esc>O
 inoremap [[     [
 inoremap []     []
 
-"" Searches
+" Searches
 nnoremap <silent> <leader>sc :nohlsearch<CR>
 nnoremap <leader>sf :Files<CR>
 nnoremap <leader>sp :GFiles<CR>
 nnoremap <leader>sb :Lines<CR>
 
-"" Files
+" Files
 nnoremap <leader>ft :Sexplore<CR>
 nnoremap <leader>rc :e ~/.vimrc<CR>
 nnoremap <Leader>rr :source $MYVIMRC<CR>
 
-"" Productivity
+" Productivity
 command! W w
 command! Q q
 
@@ -150,7 +150,7 @@ nnoremap vw viw
 
 command! OpenJournal :e ~/Dropbox/Journal
 
-"" Coc 
+" Coc 
 nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
@@ -172,6 +172,7 @@ inoremap <silent><expr> <TAB>
       \ pumvisible() ? "\<C-n>" :
       \ <SID>check_back_space() ? "\<TAB>" :
       \ coc#refresh()
+
 inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
 function! s:check_back_space() abort
@@ -186,7 +187,7 @@ let g:coc_global_extensions = ['coc-tsserver',
                               \'coc-phpls',
                               \ ]
 
-"" Easymotion
+" Easymotion
 map <Leader>l <Plug>(easymotion-bd-jk)
 map <Leader>w <Plug>(easymotion-bd-w)
 nmap <Leader>w <Plug>(easymotion-overwin-w)
@@ -197,16 +198,16 @@ let g:closetag_filenames = '*.html,*.xhtml,*.view.php'
 " Tidy (http://api.html-tidy.org/tidy/quickref_next.html)
 let g:ale_html_tidy_options = '--custom-tags blocklevel --drop-empty-elements no --show-body-only true'
 
-"" Git related
+" Git related
 nnoremap <C-p> :GitGutterPrevHunk<CR>
 nnoremap <C-n> :GitGutterNextHunk<CR>
 
-"" Buffers
+" Buffers
 nnoremap <Tab> :bnext<CR>
 nnoremap <S-Tab> :bprevious<CR>
 nnoremap <Leader>bb :Buffers<CR> 
 
-"" TypeScript / JavscScript
+" TypeScript / JavscScript
 autocmd Filetype typescript setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
 autocmd Filetype javascript setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
 
@@ -216,6 +217,6 @@ nnoremap <Leader>P :Prettier<CR>
 vmap <leader>f <Plug>(coc-format-selected)
 nmap <leader>f <Plug>(coc-format-selected)
 
-"" PHP
+" PHP
 autocmd BufNewFile,BufRead *.view.php setlocal ft=html
 
