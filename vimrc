@@ -7,7 +7,6 @@ Plug 'itchyny/lightline.vim'
 
 " Version control
 Plug 'airblade/vim-gitgutter'
-Plug 'jreybert/vimagit'
 
 " General coding helpers
 Plug 'dense-analysis/ale'
@@ -36,7 +35,9 @@ call plug#end()
 let mapleader = "\<Space>"
 
 syntax on
+
 filetype plugin on
+
 colorscheme gruvbox
 
 set encoding=utf8
@@ -69,6 +70,7 @@ set laststatus=2
 set scrolloff=999
 set nostartofline
 set nohlsearch
+set clipboard+=unnamedplus
 
 " Highlights (see: https://upload.wikimedia.org/wikipedia/commons/1/15/Xterm_256color_chart.svg)
 set colorcolumn=100
@@ -99,12 +101,6 @@ let g:lightline = {
 
 " Macros; qq to record, Q to replay
 nnoremap Q @q
-
-" Yank (handle system clipboard)
-vnoremap  <leader>y "+y
-nnoremap  <leader>Y "+yg_
-nnoremap  <leader>y "+y
-nnoremap  <leader>yy "+yy
 
 " Movement
 nnoremap j gj
@@ -155,6 +151,7 @@ nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
+nmap <silent> rn <Plug>(coc-rename)
 
 nmap <silent> cdg <Plug>(coc-diagnostic-prev)
 
@@ -214,8 +211,6 @@ autocmd Filetype javascript setlocal expandtab tabstop=2 shiftwidth=2 softtabsto
 " Prettier (using coc-prettier)
 command! -nargs=0 Prettier :CocCommand prettier.formatFile
 nnoremap <Leader>P :Prettier<CR> 
-vmap <leader>f <Plug>(coc-format-selected)
-nmap <leader>f <Plug>(coc-format-selected)
 
 " PHP
 autocmd BufNewFile,BufRead *.view.php setlocal ft=html
