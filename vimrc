@@ -187,11 +187,6 @@ let g:coc_global_extensions = ['coc-tsserver',
                               \'coc-phpls',
                               \ ]
 
-" Easymotion
-map <Leader>l <Plug>(easymotion-bd-jk)
-map <Leader>w <Plug>(easymotion-bd-w)
-nmap <Leader>w <Plug>(easymotion-overwin-w)
-
 " Easyalign
 xmap ga <Plug>(EasyAlign)
 
