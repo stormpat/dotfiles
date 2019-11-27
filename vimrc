@@ -21,9 +21,12 @@ Plug 'christoomey/vim-system-copy'
 
 " Search and discovery
 Plug 'mhinz/vim-startify'
-Plug '/usr/local/opt/fzf'
+" Plug '/usr/local/opt/fzf'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
+
+" Under testing
+Plug 'junegunn/vim-easy-align'
 
 " Languages
 Plug 'leafgarland/typescript-vim'
@@ -188,6 +191,9 @@ let g:coc_global_extensions = ['coc-tsserver',
 map <Leader>l <Plug>(easymotion-bd-jk)
 map <Leader>w <Plug>(easymotion-bd-w)
 nmap <Leader>w <Plug>(easymotion-overwin-w)
+
+" Easyalign
+xmap ga <Plug>(EasyAlign)
 
 " Closetag
 let g:closetag_filenames = '*.html,*.xhtml,*.view.php'
