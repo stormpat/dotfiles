@@ -231,6 +231,22 @@ endfunction
 
 command! -nargs=0 TrimWhiteSpace call TrimWhiteSpace()
 
+" Testing out custom fzf wrappers.
+" Could build a'workon' like project manager
+function FooBar()
+    for name in ['bar', 'foo', 'baz']
+        echo name
+    endfor
+endfunction
+
+command! TestFZF call fzf#run({
+            \  'source':  'cat ~/Desktop/foo.tzt',
+            \  'sink':    'e',
+            \  'options': '-m -x +s',
+            \  'down':    '40%'})
+
+command! -nargs=0 ShowFoo call FooBar()
+
 nnoremap <C-p> :GitGutterPrevHunk<CR>
 nnoremap <C-n> :GitGutterNextHunk<CR>
 
