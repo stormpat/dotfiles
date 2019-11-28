@@ -25,9 +25,6 @@ Plug 'mhinz/vim-startify'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 
-" Under testing
-Plug 'junegunn/vim-easy-align'
-
 " Languages
 Plug 'leafgarland/typescript-vim'
 Plug 'ianks/vim-tsx'
@@ -187,9 +184,6 @@ let g:coc_global_extensions = ['coc-tsserver',
                               \'coc-phpls',
                               \ ]
 
-" Easyalign
-xmap ga <Plug>(EasyAlign)
-
 " Closetag
 let g:closetag_filenames = '*.html,*.xhtml,*.view.php'
 
@@ -216,3 +210,5 @@ nnoremap <Leader>P :Prettier<CR>
 " PHP
 autocmd BufNewFile,BufRead *.view.php setlocal ft=html
 
+" Abbreviations
+iab :date: <c-r>=strftime("%d.%m.%Y")
