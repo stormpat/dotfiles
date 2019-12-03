@@ -21,11 +21,14 @@ Plug 'alvan/vim-closetag'
 Plug 'mhinz/vim-startify'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
+Plug 'francoiscabrol/ranger.vim'
+Plug 'rbgrouleff/bclose.vim'
 
 " Languages
 Plug 'leafgarland/typescript-vim'
 Plug 'ianks/vim-tsx'
 Plug 'fatih/vim-go'
+Plug 'reasonml-editor/vim-reason-plus'
 call plug#end()
 
 " Base settings
@@ -125,8 +128,14 @@ set directory=~/.vim/swp/
 " Lightline
 let g:lightline = {
       \ 'active': {
-      \   'left': [ [ 'mode', 'paste' ],
+      \   'left': [ [ 'mode', 'paste'],
       \             [ 'readonly', 'filename', 'modified' ] ]
+      \ },
+      \ 'component': {
+      \   'sep': ' ',
+      \  },
+      \ 'component_function': {
+      \   'lsp': 'coc#status'
       \ },
       \ }
 
@@ -163,7 +172,8 @@ nnoremap <leader>sp :GFiles<CR>
 nnoremap <leader>sb :Lines<CR>
 
 " Files
-nnoremap <leader>ft :Sexplore<CR>
+nnoremap <leader>ft :Ranger<CR>
+nnoremap <leader>fr :RangerWorkingDirectory<CR>
 nnoremap <leader>rc :e ~/.vimrc<CR>
 nnoremap <Leader>rr :source $MYVIMRC<CR>
 
@@ -183,7 +193,6 @@ nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 nmap <silent> rn <Plug>(coc-rename)
-
 nmap <silent> cdg <Plug>(coc-diagnostic-prev)
 
 function! s:show_documentation()
@@ -210,6 +219,7 @@ endfunction
 
 " LSP extensions
 let g:coc_global_extensions = ['coc-tsserver',
+                              \'coc-reason',
                               \'coc-prettier',
                               \'coc-emmet',
                               \'coc-phpls',
@@ -246,6 +256,9 @@ command! TestFZF call fzf#run({
             \  'down':    '40%'})
 
 command! -nargs=0 ShowFoo call FooBar()
+
+" Ranger
+let g:ranger_replace_netrw = 1
 
 nnoremap <C-p> :GitGutterPrevHunk<CR>
 nnoremap <C-n> :GitGutterNextHunk<CR>
