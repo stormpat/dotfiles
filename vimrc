@@ -148,6 +148,8 @@ nnoremap E $
 nnoremap ^ <nop>
 nnoremap $ <nop>
 
+nnoremap <leader>q :q<CR>
+
 " Jump to split buffers
 nnoremap <C-J> <C-W><C-J>
 nnoremap <C-K> <C-W><C-K>
