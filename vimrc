@@ -7,6 +7,7 @@ Plug 'itchyny/lightline.vim'
 
 " Version control
 Plug 'airblade/vim-gitgutter'
+Plug 'tpope/vim-fugitive'
 
 " LSP
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
@@ -31,13 +32,12 @@ Plug 'fatih/vim-go'
 Plug 'reasonml-editor/vim-reason-plus'
 call plug#end()
 
-" Base settings
+" Follow the leader
 let mapleader = "\<Space>"
+let maplocalleader = ","
 
 syntax on
-
 filetype plugin on
-
 colorscheme gruvbox
 
 " Mostly sensible defaults
@@ -51,9 +51,6 @@ set ruler
 set wildmenu
 set history=1000
 set autoread
-
- set listchars=tab:>\ ,trail:-,extends:>,precedes:<,nbsp:+
-
 set encoding=utf8
 set cmdheight=2
 set signcolumn=yes
@@ -110,7 +107,7 @@ hi default link CocHighlightText    CursorColumn
 hi default link CocHighlightRead    CocHighlightText
 hi default link CocHighlightWrite   CocHighlightText
 
-hi ExtraWhitespace ctermbg=black guibg=red
+hi ExtraWhitespace ctermbg=black guibg=black
 match ExtraWhitespace /\s\+$/
 
 " Info shown in lightline
@@ -128,14 +125,15 @@ set directory=~/.vim/swp/
 " Lightline
 let g:lightline = {
       \ 'active': {
-      \   'left': [ [ 'mode', 'paste'],
+      \   'left': [ [ 'mode', 'paste', 'gitbranch'],
       \             [ 'readonly', 'filename', 'modified' ] ]
       \ },
       \ 'component': {
       \   'sep': ' ',
       \  },
       \ 'component_function': {
-      \   'lsp': 'coc#status'
+      \   'lsp': 'coc#status',
+      \   'gitbranch': 'fugitive#head'
       \ },
       \ }
 
@@ -147,13 +145,14 @@ nnoremap j gj
 nnoremap k gk
 nnoremap B ^
 nnoremap E $
-nnoremap ^ <nop> " Disable preset
-nnoremap $ <nop> " Disable preset
+nnoremap ^ <nop>
+nnoremap $ <nop>
 
-nnoremap <C-J> <C-W><C-J> " Jump to buffer below
-nnoremap <C-K> <C-W><C-K> " Jump to buffer above
-nnoremap <C-L> <C-W><C-L> " Jump to buffer on right
-nnoremap <C-H> <C-W><C-H> " Jump to buffer on left
+" Jump to split buffers
+nnoremap <C-J> <C-W><C-J>
+nnoremap <C-K> <C-W><C-K>
+nnoremap <C-L> <C-W><C-L>
+nnoremap <C-H> <C-W><C-H>
 
 " Complete brackets
 inoremap {      {}<Left>
@@ -170,12 +169,17 @@ nnoremap <silent> <leader>sc :nohlsearch<CR>
 nnoremap <leader>sf :Files<CR>
 nnoremap <leader>sp :GFiles<CR>
 nnoremap <leader>sb :Lines<CR>
+nnoremap ? :BLines<CR>
 
 " Files
 nnoremap <leader>ft :Ranger<CR>
 nnoremap <leader>fr :RangerWorkingDirectory<CR>
 nnoremap <leader>rc :e ~/.vimrc<CR>
 nnoremap <Leader>rr :source $MYVIMRC<CR>
+nnoremap <LocalLeader>e :edit <C-R>=expand('%:p:h') . '/'<CR>
+
+" Windows
+nnoremap <Leader>o :only<CR>
 
 " Productivity
 command! W w
@@ -240,22 +244,6 @@ function TrimWhiteSpace()
 endfunction
 
 command! -nargs=0 TrimWhiteSpace call TrimWhiteSpace()
-
-" Testing out custom fzf wrappers.
-" Could build a'workon' like project manager
-function FooBar()
-    for name in ['bar', 'foo', 'baz']
-        echo name
-    endfor
-endfunction
-
-command! TestFZF call fzf#run({
-            \  'source':  'cat ~/Desktop/foo.tzt',
-            \  'sink':    'e',
-            \  'options': '-m -x +s',
-            \  'down':    '40%'})
-
-command! -nargs=0 ShowFoo call FooBar()
 
 " Ranger
 let g:ranger_replace_netrw = 1
