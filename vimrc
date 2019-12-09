@@ -17,6 +17,7 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
 Plug 'easymotion/vim-easymotion'
 Plug 'alvan/vim-closetag'
+Plug 'jiangmiao/auto-pairs'
 
 " Search and discovery
 Plug 'mhinz/vim-startify'
@@ -157,14 +158,14 @@ nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
 
 " Complete brackets
-inoremap {      {}<Left>
-inoremap {<CR>  {<CR>}<Esc>O
-inoremap {{     {
-inoremap {}     {}
-inoremap [      []<Left>
-inoremap [<CR>  [<CR>]<Esc>O
-inoremap [[     [
-inoremap []     []
+" inoremap {      {}<Left>
+" inoremap {<CR>  {<CR>}<Esc>O
+" inoremap {{     {
+" inoremap {}     {}
+" inoremap [      []<Left>
+" inoremap [<CR>  [<CR>]<Esc>O
+" inoremap [[     [
+" inoremap []     []
 
 " Searches
 nnoremap <silent> <leader>sc :nohlsearch<CR>
@@ -199,6 +200,7 @@ nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 nmap <silent> rn <Plug>(coc-rename)
+nmap <silent> qf  <Plug>(coc-fix-current)
 nmap <silent> cdg <Plug>(coc-diagnostic-prev)
 
 function! s:show_documentation()
@@ -271,3 +273,7 @@ autocmd BufNewFile,BufRead *.view.php setlocal ft=html
 
 " Abbreviations
 iab :date: <c-r>=strftime("%d.%m.%Y")
+
+" FZF
+let $FZF_DEFAULT_OPTS='--reverse'
+
