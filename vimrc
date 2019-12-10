@@ -113,6 +113,7 @@ let g:currentmode={
     \ 'i': 'insert',
     \ 'v': 'visual',
     \ 'V': 'visual',
+    \ 'R': 'replace',
     \ "\<C-V>": 'visual',
     \ 'default': 'default',
     \ }
@@ -130,6 +131,9 @@ function! ChangeStatuslineColor()
     endif
     if (cur_mode == 'default')
         exe 'hi! StatusLine ctermfg=232'
+    endif
+    if (cur_mode == 'replace')
+        exe 'hi! StatusLine ctermfg=001'
     endif
 endfunction
 
@@ -160,6 +164,9 @@ function! ShowMode()
   endif
   if current_mode ==# 'c'
     return '[COMMAND]'
+  endif
+  if current_mode ==# 'R'
+    return '[REPLACE]'
   endif
   return '[OTHER (' . toupper(current_mode) . ')]'
 endfunction
