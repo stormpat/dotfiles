@@ -1,15 +1,14 @@
 " @stormpat's Vim config
 
 call plug#begin('~/.vim/plugged')
-" Theme and visuals
+" Themes
 Plug 'morhetz/gruvbox'
-Plug 'itchyny/lightline.vim'
 
 " Version control
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
 
-" LSP
+" Language server
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " Productivity boosters
@@ -24,7 +23,6 @@ Plug 'mhinz/vim-startify'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'francoiscabrol/ranger.vim'
-Plug 'rbgrouleff/bclose.vim'
 
 " Languages
 Plug 'leafgarland/typescript-vim'
@@ -47,13 +45,11 @@ set backspace=indent,eol,start
 set complete-=i
 set smarttab
 set nrformats-=octal
-set laststatus=2
 set ruler
 set wildmenu
 set history=1000
 set autoread
 set encoding=utf8
-set cmdheight=2
 set signcolumn=yes
 set ffs=unix,dos,mac
 set nocompatible
@@ -79,7 +75,7 @@ set nostartofline
 set nohlsearch
 set clipboard+=unnamedplus
 
-" Highlights (see: https://upload.wikimedia.org/wikipedia/commons/1/15/Xterm_256color_chart.svg)
+" Highlights (https://upload.wikimedia.org/wikipedia/commons/1/15/Xterm_256color_chart.svg)
 set colorcolumn=100
 highlight ColorColumn ctermbg=236
 
@@ -111,8 +107,63 @@ hi default link CocHighlightWrite   CocHighlightText
 hi ExtraWhitespace ctermbg=black guibg=black
 match ExtraWhitespace /\s\+$/
 
-" Info shown in lightline
+" Statusline
+let g:currentmode={
+    \ 'n': 'normal',
+    \ 'i': 'insert',
+    \ 'v': 'visual',
+    \ 'V': 'visual',
+    \ "\<C-V>": 'visual',
+    \ 'default': 'default',
+    \ }
+
+function! ChangeStatuslineColor()
+    let cur_mode = get(g:currentmode, mode(), 'default')
+    if (cur_mode == 'normal')
+        exe 'hi! StatusLine ctermfg=238'
+    endif
+    if (cur_mode == 'visual')
+        exe 'hi! StatusLine ctermfg=199'
+    endif
+    if (cur_mode == 'insert')
+        exe 'hi! StatusLine ctermfg=027'
+    endif
+    if (cur_mode == 'default')
+        exe 'hi! StatusLine ctermfg=232'
+    endif
+endfunction
+
+function! GitInfo()
+  let git = fugitive#head()
+  if git != ''
+    return git
+  else
+    return '[x]'
+endfunction
+
+function! ReadOnly()
+  if &readonly || !&modifiable
+    return '[RO]'
+  else
+    return '[ED]'
+endfunction
+
+set laststatus=2
 set noshowmode
+set cmdheight=1
+
+set statusline=
+set statusline+=%{ChangeStatuslineColor()}               " Statusline bg
+set statusline+=%0*\ %{toupper(mode())}                  " Current mode
+set statusline+=%8*\ [%n]                                " buffernr
+set statusline+=%8*\ %{GitInfo()}                        " Git Branch name
+set statusline+=%8*\ %<%F\ %{ReadOnly()}\ %m\ %w\        " File+path
+set statusline+=%#warningmsg#
+set statusline+=%*
+set statusline+=%9*\ %=                                  " Space
+set statusline+=%8*\ %y\                                 " FileType
+set statusline+=%7*\ %{(&fenc!=''?&fenc:&enc)}\[%{&ff}]\ " Encoding & Fileformat
+set statusline+=%0*\ %3p%%\ ?\ %l:\ %3c\                 " Rownumber / total (%)
 
 ret noerrorbells
 set novisualbell
@@ -122,21 +173,6 @@ set tm=500
 set undodir=~/.vim/undo/
 set backupdir=~/.vim/backup/
 set directory=~/.vim/swp/
-
-" Lightline
-let g:lightline = {
-      \ 'active': {
-      \   'left': [ [ 'mode', 'paste', 'gitbranch'],
-      \             [ 'readonly', 'filename', 'modified' ] ]
-      \ },
-      \ 'component': {
-      \   'sep': ' ',
-      \  },
-      \ 'component_function': {
-      \   'lsp': 'coc#status',
-      \   'gitbranch': 'fugitive#head'
-      \ },
-      \ }
 
 " Macros; qq to record, Q to replay
 nnoremap Q @q
@@ -156,16 +192,6 @@ nnoremap <C-J> <C-W><C-J>
 nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
-
-" Complete brackets
-" inoremap {      {}<Left>
-" inoremap {<CR>  {<CR>}<Esc>O
-" inoremap {{     {
-" inoremap {}     {}
-" inoremap [      []<Left>
-" inoremap [<CR>  [<CR>]<Esc>O
-" inoremap [[     [
-" inoremap []     []
 
 " Searches
 nnoremap <silent> <leader>sc :nohlsearch<CR>
@@ -192,7 +218,8 @@ nnoremap cw ciw
 nnoremap dw diw
 nnoremap vw viw
 
-command! OpenJournal :e ~/Dropbox/Journal
+command! OpenJournal :edit ~/Dropbox/Journal
+command! Bclose :bufdo bd
 
 " Coc
 nmap <silent> gd <Plug>(coc-definition)
@@ -200,8 +227,9 @@ nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 nmap <silent> rn <Plug>(coc-rename)
-nmap <silent> qf  <Plug>(coc-fix-current)
-nmap <silent> cdg <Plug>(coc-diagnostic-prev)
+nmap <silent> qf <Plug>(coc-fix-current)
+nmap <silent> ge <Plug>(coc-diagnostic-prev)
+nmap <silent> gE <Plug>(coc-diagnostic-next)
 
 function! s:show_documentation()
   if (index(['vim','help'], &filetype) >= 0)
@@ -266,7 +294,7 @@ autocmd Filetype javascript setlocal expandtab tabstop=2 shiftwidth=2 softtabsto
 
 " Prettier (using coc-prettier)
 command! -nargs=0 Prettier :CocCommand prettier.formatFile
-nnoremap <Leader>P :Prettier<CR>
+nnoremap <Leader> P :Prettier<CR>
 
 " PHP
 autocmd BufNewFile,BufRead *.view.php setlocal ft=html
