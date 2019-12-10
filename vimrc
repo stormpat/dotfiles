@@ -39,6 +39,7 @@ filetype plugin on
 colorscheme gruvbox
 
 " Mostly sensible defaults
+set splitbelow
 set autoindent
 set backspace=indent,eol,start
 set complete-=i
@@ -230,6 +231,10 @@ nnoremap <leader>sb :Lines<CR>
 nnoremap ? :BLines<CR>
 
 " Files
+let g:netrw_liststyle = 3
+let g:netrw_banner = 0
+let g:netrw_winsize = 25
+
 nnoremap <leader>ft :Sexplore<CR>
 nnoremap <leader>rc :e ~/.vimrc<CR>
 nnoremap <Leader>rr :source $MYVIMRC<CR>
@@ -290,7 +295,7 @@ let g:coc_global_extensions = ['coc-tsserver',
                               \ ]
 " Closetag
 let g:closetag_filenames = '*.html, *.view.php, *.jsx, *.tsx'
-let g:closetag_regions =  {
+let g:closetag_regions = {
 \ 'typescript.tsx': 'jsxRegion,tsxRegion',
 \ 'javascript.jsx': 'jsxRegion',
 \ }
