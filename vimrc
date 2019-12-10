@@ -334,4 +334,5 @@ iab :date: <c-r>=strftime("%d.%m.%Y")
 
 " FZF
 let $FZF_DEFAULT_OPTS='--reverse'
+let g:fzf_layout = { 'down': '~25%' }
 
