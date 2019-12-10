@@ -22,7 +22,6 @@ Plug 'jiangmiao/auto-pairs'
 Plug 'mhinz/vim-startify'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
-Plug 'francoiscabrol/ranger.vim'
 
 " Languages
 Plug 'leafgarland/typescript-vim'
@@ -231,8 +230,7 @@ nnoremap <leader>sb :Lines<CR>
 nnoremap ? :BLines<CR>
 
 " Files
-nnoremap <leader>ft :Ranger<CR>
-nnoremap <leader>fr :RangerWorkingDirectory<CR>
+nnoremap <leader>ft :Sexplore<CR>
 nnoremap <leader>rc :e ~/.vimrc<CR>
 nnoremap <Leader>rr :source $MYVIMRC<CR>
 nnoremap <LocalLeader>e :edit <C-R>=expand('%:p:h') . '/'<CR>
@@ -306,9 +304,6 @@ function TrimWhiteSpace()
 endfunction
 
 command! -nargs=0 TrimWhiteSpace call TrimWhiteSpace()
-
-" Ranger
-let g:ranger_replace_netrw = 1
 
 nnoremap <C-p> :GitGutterPrevHunk<CR>
 nnoremap <C-n> :GitGutterNextHunk<CR>
