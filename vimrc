@@ -141,6 +141,29 @@ function! GitInfo()
     return '[x]'
 endfunction
 
+function! ShowMode()
+  let current_mode = mode()
+  if current_mode ==# 'v'
+    return '[VISUALC]'
+  endif
+  if current_mode ==# 'V'
+    return '[VISUALL]'
+  endif
+  if current_mode == "\<C-V>"
+    return '[VISUALB]'
+  endif
+  if current_mode ==# 'i'
+    return '[INSERT]'
+  endif
+  if current_mode ==# 'n'
+    return '[NORMAL]'
+  endif
+  if current_mode ==# 'c'
+    return '[COMMAND]'
+  endif
+  return '[OTHER (' . toupper(current_mode) . ')]'
+endfunction
+
 function! ReadOnly()
   if &readonly || !&modifiable
     return '[RO]'
@@ -154,7 +177,7 @@ set cmdheight=1
 
 set statusline=
 set statusline+=%{ChangeStatuslineColor()}               " Statusline bg
-set statusline+=%0*\ %{toupper(mode())}                  " Current mode
+set statusline+=%0*\ %{ShowMode()}                       " Current mode
 set statusline+=%8*\ [%n]                                " buffernr
 set statusline+=%8*\ %{GitInfo()}                        " Git Branch name
 set statusline+=%8*\ %<%F\ %{ReadOnly()}\ %m\ %w\        " File+path
