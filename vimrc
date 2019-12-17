@@ -1,8 +1,10 @@
 " @stormpat's Vim config
 
 call plug#begin('~/.vim/plugged')
-" Themes
+" Themes and visual
 Plug 'morhetz/gruvbox'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 
 " Version control
 Plug 'airblade/vim-gitgutter'
@@ -14,14 +16,19 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 " Productivity boosters
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
-Plug 'easymotion/vim-easymotion'
+Plug 'justinmk/vim-sneak'
 Plug 'alvan/vim-closetag'
 Plug 'jiangmiao/auto-pairs'
 
-" Search and discovery
+" Searching, files and discovery
 Plug 'mhinz/vim-startify'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
+
+" Netrw replacement
+Plug 'francoiscabrol/ranger.vim'
+Plug 'rbgrouleff/bclose.vim'
+let g:ranger_replace_netrw = 1
 
 " Languages
 Plug 'leafgarland/typescript-vim'
@@ -34,11 +41,14 @@ call plug#end()
 let mapleader = "\<Space>"
 let maplocalleader = ","
 
-syntax on
-filetype plugin on
 colorscheme gruvbox
+let g:airline_theme='base16_gruvbox_dark_hard'
 
 " Mostly sensible defaults
+syntax on
+filetype plugin on
+
+set termguicolors
 set splitbelow
 set autoindent
 set backspace=indent,eol,start
@@ -67,7 +77,6 @@ set softtabstop=0
 set showcmd
 set lazyredraw
 set incsearch
-set hlsearch
 set hidden
 set nowrap
 set scrolloff=999
@@ -82,118 +91,34 @@ highlight ColorColumn ctermbg=236
 set cursorline
 highlight CursorLine ctermbg=236
 
-hi default CocUnderline    cterm=underline gui=underline
-hi default CocErrorSign    ctermfg=Red     guifg=#ff0000
-hi default CocWarningSign  ctermfg=Brown   guifg=#ff922b
-hi default CocInfoSign     ctermfg=Yellow  guifg=#fab005
-hi default CocHintSign     ctermfg=Blue    guifg=#15aabf
-hi default CocSelectedText ctermfg=Red     guifg=#fb4934
-hi default CocCodeLens     ctermfg=Gray    guifg=#999999
-hi default link CocErrorFloat       CocErrorSign
-hi default link CocWarningFloat     CocWarningSign
-hi default link CocInfoFloat        CocInfoSign
-hi default link CocHintFloat        CocHintSign
-hi default link CocErrorHighlight   CocUnderline
-hi default link CocWarningHighlight CocUnderline
-hi default link CocInfoHighlight    CocUnderline
-hi default link CocHintHighlight    CocUnderline
-hi default link CocListMode         ModeMsg
-hi default link CocListPath         Comment
-hi default link CocFloating         Pmenu
-hi default link CocHighlightText    CursorColumn
-hi default link CocHighlightRead    CocHighlightText
-hi default link CocHighlightWrite   CocHighlightText
+" hi default CocUnderline    cterm=underline gui=underline
+" hi default CocErrorSign    ctermfg=Red     guifg=#ff0000
+" hi default CocWarningSign  ctermfg=Brown   guifg=#ff922b
+" hi default CocInfoSign     ctermfg=Yellow  guifg=#fab005
+" hi default CocHintSign     ctermfg=Blue    guifg=#15aabf
+" hi default CocSelectedText ctermfg=Red     guifg=#fb4934
+" hi default CocCodeLens     ctermfg=Gray    guifg=#999999
+" hi default link CocErrorFloat       CocErrorSign
+" hi default link CocWarningFloat     CocWarningSign
+" hi default link CocInfoFloat        CocInfoSign
+" hi default link CocHintFloat        CocHintSign
+" hi default link CocErrorHighlight   CocUnderline
+" hi default link CocWarningHighlight CocUnderline
+" hi default link CocInfoHighlight    CocUnderline
+" hi default link CocHintHighlight    CocUnderline
+" hi default link CocListMode         ModeMsg
+" hi default link CocListPath         Comment
+" hi default link CocFloating         Pmenu
+" hi default link CocHighlightText    CursorColumn
+" hi default link CocHighlightRead    CocHighlightText
+" hi default link CocHighlightWrite   CocHighlightText
 
 hi ExtraWhitespace ctermbg=black guibg=black
 match ExtraWhitespace /\s\+$/
 
-" Statusline
-let g:currentmode={
-    \ 'n': 'normal',
-    \ 'i': 'insert',
-    \ 'v': 'visual',
-    \ 'V': 'visual',
-    \ 'R': 'replace',
-    \ "\<C-V>": 'visual',
-    \ 'default': 'default',
-    \ }
-
-function! ChangeStatuslineColor()
-    let cur_mode = get(g:currentmode, mode(), 'default')
-    if (cur_mode == 'normal')
-        exe 'hi! StatusLine ctermfg=238'
-    endif
-    if (cur_mode == 'visual')
-        exe 'hi! StatusLine ctermfg=199'
-    endif
-    if (cur_mode == 'insert')
-        exe 'hi! StatusLine ctermfg=027'
-    endif
-    if (cur_mode == 'default')
-        exe 'hi! StatusLine ctermfg=232'
-    endif
-    if (cur_mode == 'replace')
-        exe 'hi! StatusLine ctermfg=001'
-    endif
-endfunction
-
-function! GitInfo()
-  let git = fugitive#head()
-  if git != ''
-    return git
-  else
-    return '[x]'
-endfunction
-
-function! ShowMode()
-  let current_mode = mode()
-  if current_mode ==# 'v'
-    return '[VISUALC]'
-  endif
-  if current_mode ==# 'V'
-    return '[VISUALL]'
-  endif
-  if current_mode == "\<C-V>"
-    return '[VISUALB]'
-  endif
-  if current_mode ==# 'i'
-    return '[INSERT]'
-  endif
-  if current_mode ==# 'n'
-    return '[NORMAL]'
-  endif
-  if current_mode ==# 'c'
-    return '[COMMAND]'
-  endif
-  if current_mode ==# 'R'
-    return '[REPLACE]'
-  endif
-  return '[OTHER (' . toupper(current_mode) . ')]'
-endfunction
-
-function! ReadOnly()
-  if &readonly || !&modifiable
-    return '[RO]'
-  else
-    return '[ED]'
-endfunction
-
 set laststatus=2
 set noshowmode
 set cmdheight=1
-
-set statusline=
-set statusline+=%{ChangeStatuslineColor()}               " Statusline bg
-set statusline+=%0*\ %{ShowMode()}                       " Current mode
-set statusline+=%8*\ [%n]                                " buffernr
-set statusline+=%8*\ %{GitInfo()}                        " Git Branch name
-set statusline+=%8*\ %<%F\ %{ReadOnly()}\ %m\ %w\        " File+path
-set statusline+=%#warningmsg#
-set statusline+=%*
-set statusline+=%9*\ %=                                  " Space
-set statusline+=%8*\ %y\                                 " FileType
-set statusline+=%7*\ %{(&fenc!=''?&fenc:&enc)}\[%{&ff}]\ " Encoding & Fileformat
-set statusline+=%0*\ %3p%%\ ?\ %l:\ %3c\                 " Rownumber / total (%)
 
 ret noerrorbells
 set novisualbell
@@ -230,12 +155,7 @@ nnoremap <leader>sp :GFiles<CR>
 nnoremap <leader>sb :Lines<CR>
 nnoremap ? :BLines<CR>
 
-" Files
-let g:netrw_liststyle = 3
-let g:netrw_banner = 0
-let g:netrw_winsize = 25
-
-nnoremap <leader>ft :Sexplore<CR>
+nnoremap <leader>ft :RangerCurrentDirectory<CR>
 nnoremap <leader>rc :e ~/.vimrc<CR>
 nnoremap <Leader>rr :source $MYVIMRC<CR>
 nnoremap <LocalLeader>e :edit <C-R>=expand('%:p:h') . '/'<CR>
@@ -250,9 +170,13 @@ command! Q q
 nnoremap cw ciw
 nnoremap dw diw
 nnoremap vw viw
+nnoremap yw yiw
 
 command! OpenJournal :edit ~/Dropbox/Journal
 command! Bclose :bufdo bd
+
+nnoremap <Leader>o :only<CR>
+nnoremap <LocalLeader>p viw"0p
 
 " Coc
 nmap <silent> gd <Plug>(coc-definition)
@@ -290,6 +214,7 @@ endfunction
 let g:coc_global_extensions = ['coc-tsserver',
                               \'coc-reason',
                               \'coc-prettier',
+                              \'coc-snippets',
                               \'coc-emmet',
                               \'coc-phpls',
                               \ ]
