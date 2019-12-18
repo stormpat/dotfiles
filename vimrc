@@ -8,6 +8,7 @@ Plug 'vim-airline/vim-airline-themes'
 
 " Version control
 Plug 'airblade/vim-gitgutter'
+Plug 'iberianpig/tig-explorer.vim'
 Plug 'tpope/vim-fugitive'
 
 " Language server
@@ -150,8 +151,8 @@ nnoremap <C-H> <C-W><C-H>
 
 " Searches
 nnoremap <silent> <leader>sc :nohlsearch<CR>
-nnoremap <leader>sf :GFiles<CR>
-nnoremap <leader>sp :GFiles?<CR>
+nnoremap <leader>sp :GFiles<CR>
+nnoremap <leader>sP :GFiles?<CR>
 nnoremap <leader>sb :Lines<CR>
 nnoremap ? :BLines<CR>
 
@@ -242,7 +243,7 @@ command! -nargs=0 Workon call fzf#run(
             \ 'options': '+m',
             \ 'down': '20%'
             \ })
-     
+
 nnoremap <C-p> :GitGutterPrevHunk<CR>
 nnoremap <C-n> :GitGutterNextHunk<CR>
 
@@ -257,7 +258,6 @@ autocmd Filetype javascript setlocal expandtab tabstop=2 shiftwidth=2 softtabsto
 
 " Prettier (using coc-prettier)
 command! -nargs=0 Prettier :CocCommand prettier.formatFile
-nnoremap <Leader> P :Prettier<CR>
 
 " PHP
 autocmd BufNewFile,BufRead *.view.php setlocal ft=html
