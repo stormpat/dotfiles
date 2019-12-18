@@ -150,8 +150,8 @@ nnoremap <C-H> <C-W><C-H>
 
 " Searches
 nnoremap <silent> <leader>sc :nohlsearch<CR>
-nnoremap <leader>sf :Files<CR>
-nnoremap <leader>sp :GFiles<CR>
+nnoremap <leader>sf :GFiles<CR>
+nnoremap <leader>sp :GFiles?<CR>
 nnoremap <leader>sb :Lines<CR>
 nnoremap ? :BLines<CR>
 
@@ -226,7 +226,7 @@ let g:closetag_regions = {
 \ }
 
 " Tidy (http://api.html-tidy.org/tidy/quickref_next.html)
-let g:ale_html_tidy_options = '--custom-tags blocklevel --drop-empty-elements no --show-body-only true'
+" let g:ale_html_tidy_options = '--custom-tags blocklevel --drop-empty-elements no --show-body-only true'
 
 function TrimWhiteSpace()
   %s/\s*$//
@@ -235,6 +235,14 @@ endfunction
 
 command! -nargs=0 TrimWhiteSpace call TrimWhiteSpace()
 
+command! -nargs=0 Workon call fzf#run(
+            \ {
+            \ 'source': 'cat ~/.myprojects',
+            \ 'sink': 'cd',
+            \ 'options': '+m',
+            \ 'down': '20%'
+            \ })
+     
 nnoremap <C-p> :GitGutterPrevHunk<CR>
 nnoremap <C-n> :GitGutterNextHunk<CR>
 
@@ -259,5 +267,5 @@ iab :date: <c-r>=strftime("%d.%m.%Y")
 
 " FZF
 let $FZF_DEFAULT_OPTS='--reverse'
-let g:fzf_layout = { 'down': '~25%' }
+let g:fzf_layout = { 'down': '~20%' }
 
