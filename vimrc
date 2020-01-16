@@ -8,8 +8,11 @@ Plug 'vim-airline/vim-airline-themes'
 
 " Version control
 Plug 'airblade/vim-gitgutter'
-Plug 'iberianpig/tig-explorer.vim'
 Plug 'tpope/vim-fugitive'
+Plug 'APZelos/blamer.nvim'
+let g:blamer_prefix = ':: '
+let g:blamer_template = '<author> <author-time> <summary>'
+let g:blamer_date_format = '%d.%m.%Y %H:%M'
 
 " Language server
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
@@ -17,7 +20,6 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 " Productivity boosters
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
-Plug 'justinmk/vim-sneak'
 Plug 'alvan/vim-closetag'
 Plug 'jiangmiao/auto-pairs'
 
@@ -28,10 +30,13 @@ Plug 'junegunn/fzf.vim'
 
 " Netrw replacement
 Plug 'francoiscabrol/ranger.vim'
-Plug 'rbgrouleff/bclose.vim'
+Plug 'rbgrouleff/bclose.vim'| " A rager dependency
 let g:ranger_replace_netrw = 1
 
-" Languages
+" Misc
+Plug 'psf/black'| " Requires pip install neovim
+
+"Languages
 Plug 'leafgarland/typescript-vim'
 Plug 'ianks/vim-tsx'
 Plug 'fatih/vim-go'
@@ -84,6 +89,7 @@ set scrolloff=999
 set nostartofline
 set nohlsearch
 set clipboard+=unnamedplus
+set diffopt+=vertical
 
 " Highlights (https://upload.wikimedia.org/wikipedia/commons/1/15/Xterm_256color_chart.svg)
 set colorcolumn=100
@@ -92,28 +98,6 @@ highlight ColorColumn ctermbg=236
 set cursorline
 highlight CursorLine ctermbg=236
 
-" hi default CocUnderline    cterm=underline gui=underline
-" hi default CocErrorSign    ctermfg=Red     guifg=#ff0000
-" hi default CocWarningSign  ctermfg=Brown   guifg=#ff922b
-" hi default CocInfoSign     ctermfg=Yellow  guifg=#fab005
-" hi default CocHintSign     ctermfg=Blue    guifg=#15aabf
-" hi default CocSelectedText ctermfg=Red     guifg=#fb4934
-" hi default CocCodeLens     ctermfg=Gray    guifg=#999999
-" hi default link CocErrorFloat       CocErrorSign
-" hi default link CocWarningFloat     CocWarningSign
-" hi default link CocInfoFloat        CocInfoSign
-" hi default link CocHintFloat        CocHintSign
-" hi default link CocErrorHighlight   CocUnderline
-" hi default link CocWarningHighlight CocUnderline
-" hi default link CocInfoHighlight    CocUnderline
-" hi default link CocHintHighlight    CocUnderline
-" hi default link CocListMode         ModeMsg
-" hi default link CocListPath         Comment
-" hi default link CocFloating         Pmenu
-" hi default link CocHighlightText    CursorColumn
-" hi default link CocHighlightRead    CocHighlightText
-" hi default link CocHighlightWrite   CocHighlightText
-
 hi ExtraWhitespace ctermbg=black guibg=black
 match ExtraWhitespace /\s\+$/
 
@@ -121,14 +105,17 @@ set laststatus=2
 set noshowmode
 set cmdheight=1
 
-ret noerrorbells
+set noerrorbells
 set novisualbell
 set t_vb=
 set tm=500
 
-set undodir=~/.vim/undo/
-set backupdir=~/.vim/backup/
-set directory=~/.vim/swp/
+" set undodir=~/.vim/undo/
+" set backupdir=~/.vim/backup/
+" set directory=~/.vim/swp/
+set nobackup
+set noswapfile
+set noundofile
 
 " Macros; qq to record, Q to replay
 nnoremap Q @q
@@ -151,6 +138,7 @@ nnoremap <C-H> <C-W><C-H>
 
 " Searches
 nnoremap <silent> <leader>sc :nohlsearch<CR>
+nnoremap <leader>sf :Files<CR>
 nnoremap <leader>sp :GFiles<CR>
 nnoremap <leader>sP :GFiles?<CR>
 nnoremap <leader>sb :Lines<CR>
@@ -216,6 +204,7 @@ let g:coc_global_extensions = ['coc-tsserver',
                               \'coc-reason',
                               \'coc-prettier',
                               \'coc-snippets',
+                              \'coc-python',
                               \'coc-emmet',
                               \'coc-phpls',
                               \ ]
@@ -245,7 +234,7 @@ command! -nargs=0 Workon call fzf#run(
             \ })
 
 nnoremap <C-p> :GitGutterPrevHunk<CR>
-nnoremap <C-n> :GitGutterNextHunk<CR>
+nnoremap <C-o> :GitGutterNextHunk<CR>
 
 " Buffers
 nnoremap <Tab> :bnext<CR>
@@ -263,7 +252,7 @@ command! -nargs=0 Prettier :CocCommand prettier.formatFile
 autocmd BufNewFile,BufRead *.view.php setlocal ft=html
 
 " Abbreviations
-iab :date: <c-r>=strftime("%d.%m.%Y")
+iab date: <c-r>=strftime("%d.%m.%Y")
 
 " FZF
 let $FZF_DEFAULT_OPTS='--reverse'
