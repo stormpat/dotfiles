@@ -13,12 +13,14 @@ Plug 'APZelos/blamer.nvim'
 let g:blamer_prefix = ':: '
 let g:blamer_template = '<author> <author-time> <summary>'
 let g:blamer_date_format = '%d.%m.%Y %H:%M'
+let g:blamer_enabled = 1
 
 " Language server
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " Productivity boosters
 Plug 'tpope/vim-surround'
+Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-commentary'
 Plug 'alvan/vim-closetag'
 Plug 'jiangmiao/auto-pairs'
@@ -30,7 +32,7 @@ Plug 'junegunn/fzf.vim'
 
 " Netrw replacement
 Plug 'francoiscabrol/ranger.vim'
-Plug 'rbgrouleff/bclose.vim'| " A rager dependency
+Plug 'rbgrouleff/bclose.vim'| " A ranger dependency
 let g:ranger_replace_netrw = 1
 
 " Misc
@@ -48,11 +50,15 @@ let mapleader = "\<Space>"
 let maplocalleader = ","
 
 colorscheme gruvbox
-let g:airline_theme='base16_gruvbox_dark_hard'
+let g:airline_theme='gruvbox'
 
 " Mostly sensible defaults
 syntax on
 filetype plugin on
+
+" Spell checking
+set spell spelllang=en_us
+set nospell
 
 set termguicolors
 set splitbelow
