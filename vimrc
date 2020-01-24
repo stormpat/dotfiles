@@ -31,12 +31,11 @@ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 
 " Netrw replacement
-Plug 'francoiscabrol/ranger.vim'
-Plug 'rbgrouleff/bclose.vim'| " A ranger dependency
-let g:ranger_replace_netrw = 1
+Plug 'vifm/vifm.vim'
 
 " Misc
-Plug 'psf/black'| " Requires pip install neovim
+" (psf/black) requires pip install neovim
+Plug 'psf/black'
 
 "Languages
 Plug 'leafgarland/typescript-vim'
@@ -150,7 +149,7 @@ nnoremap <leader>sP :GFiles?<CR>
 nnoremap <leader>sb :Lines<CR>
 nnoremap ? :BLines<CR>
 
-nnoremap <leader>ft :RangerCurrentDirectory<CR>
+nnoremap <leader>ft :Vifm<CR>
 nnoremap <leader>rc :e ~/.vimrc<CR>
 nnoremap <Leader>rr :source $MYVIMRC<CR>
 nnoremap <LocalLeader>e :edit <C-R>=expand('%:p:h') . '/'<CR>
