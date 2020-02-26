@@ -2,7 +2,7 @@
 
 call plug#begin('~/.vim/plugged')
 " Themes and visual
-Plug 'morhetz/gruvbox'
+Plug 'arzg/vim-colors-xcode'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
@@ -13,7 +13,7 @@ Plug 'APZelos/blamer.nvim'
 let g:blamer_prefix = ':: '
 let g:blamer_template = '<author> <author-time> <summary>'
 let g:blamer_date_format = '%d.%m.%Y %H:%M'
-let g:blamer_enabled = 1
+let g:blamer_enabled = 0
 
 " Language server
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
@@ -30,8 +30,11 @@ Plug 'mhinz/vim-startify'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 
-" Netrw replacement
-Plug 'vifm/vifm.vim'
+Plug 'lambdalisue/fern.vim'
+
+let g:netrw_banner = 0     " Hide annoying 'help' banner
+let g:netrw_liststyle = 3  " Use tree view
+let g:netrw_winsize = '30' " Smaller default window size
 
 " Misc
 " (psf/black) requires pip install neovim
@@ -47,9 +50,6 @@ call plug#end()
 " Follow the leader
 let mapleader = "\<Space>"
 let maplocalleader = ","
-
-colorscheme gruvbox
-let g:airline_theme='gruvbox'
 
 " Mostly sensible defaults
 syntax on
@@ -115,12 +115,14 @@ set novisualbell
 set t_vb=
 set tm=500
 
-" set undodir=~/.vim/undo/
-" set backupdir=~/.vim/backup/
-" set directory=~/.vim/swp/
 set nobackup
 set noswapfile
 set noundofile
+
+syntax on
+let g:xcodedark_green_comments=1
+let g:xcodedark_emph_funcs=1
+colorscheme xcodedark
 
 " Macros; qq to record, Q to replay
 nnoremap Q @q
@@ -141,6 +143,9 @@ nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
 
+" Replace from register zero
+map <C-j> cw<C-r>0<ESC>
+
 " Searches
 nnoremap <silent> <leader>sc :nohlsearch<CR>
 nnoremap <leader>sf :Files<CR>
@@ -149,7 +154,7 @@ nnoremap <leader>sP :GFiles?<CR>
 nnoremap <leader>sb :Lines<CR>
 nnoremap ? :BLines<CR>
 
-nnoremap <leader>ft :Vifm<CR>
+nnoremap <leader>ft :Fern . -reveal=% -drawer<CR>
 nnoremap <leader>rc :e ~/.vimrc<CR>
 nnoremap <Leader>rr :source $MYVIMRC<CR>
 nnoremap <LocalLeader>e :edit <C-R>=expand('%:p:h') . '/'<CR>
@@ -223,7 +228,7 @@ let g:closetag_regions = {
 " Tidy (http://api.html-tidy.org/tidy/quickref_next.html)
 " let g:ale_html_tidy_options = '--custom-tags blocklevel --drop-empty-elements no --show-body-only true'
 
-function TrimWhiteSpace()
+function! TrimWhiteSpace()
   %s/\s*$//
   ''
 endfunction
@@ -241,8 +246,8 @@ command! -nargs=0 Workon call fzf#run(
 nnoremap <C-p> :GitGutterPrevHunk<CR>
 nnoremap <C-o> :GitGutterNextHunk<CR>
 
-" Buffers
-nnoremap <Tab> :bnext<CR>
+" Buffer
+nnoremap <Tab> :buffer#<CR>
 nnoremap <S-Tab> :bprevious<CR>
 nnoremap <Leader>bb :Buffers<CR>
 
@@ -258,6 +263,7 @@ autocmd BufNewFile,BufRead *.view.php setlocal ft=html
 
 " Abbreviations
 iab date: <c-r>=strftime("%d.%m.%Y")
+imap cll console.log()<Esc><S-f>(a
 
 " FZF
 let $FZF_DEFAULT_OPTS='--reverse'
