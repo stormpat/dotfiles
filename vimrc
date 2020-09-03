@@ -1,50 +1,36 @@
 " @stormpat's Vim config
 
 call plug#begin('~/.vim/plugged')
-" Themes and visual
-Plug 'arzg/vim-colors-xcode'
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
+" Plug 'arzg/vim-colors-xcode'
+Plug 'YorickPeterse/vim-paper'
+Plug 'habamax/vim-polar'
 
-" Version control
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
+Plug 'romgrk/searchReplace.vim'
 Plug 'APZelos/blamer.nvim'
-let g:blamer_prefix = ':: '
-let g:blamer_template = '<author> <author-time> <summary>'
-let g:blamer_date_format = '%d.%m.%Y %H:%M'
-let g:blamer_enabled = 0
 
-" Language server
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-
-" Productivity boosters
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-commentary'
 Plug 'alvan/vim-closetag'
-Plug 'jiangmiao/auto-pairs'
+Plug 'terryma/vim-expand-region'
+Plug 'easymotion/vim-easymotion'
 
-" Searching, files and discovery
+Plug 'voldikss/vim-floaterm'
 Plug 'mhinz/vim-startify'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
+Plug 'pbogut/fzf-mru.vim'
 
-Plug 'lambdalisue/fern.vim'
+Plug 'vifm/vifm.vim'
 
-let g:netrw_banner = 0     " Hide annoying 'help' banner
-let g:netrw_liststyle = 3  " Use tree view
-let g:netrw_winsize = '30' " Smaller default window size
-
-" Misc
-" (psf/black) requires pip install neovim
-Plug 'psf/black'
-
-"Languages
 Plug 'leafgarland/typescript-vim'
 Plug 'ianks/vim-tsx'
 Plug 'fatih/vim-go'
 Plug 'reasonml-editor/vim-reason-plus'
+Plug 'cespare/vim-toml'
 call plug#end()
 
 " Follow the leader
@@ -54,6 +40,11 @@ let maplocalleader = ","
 " Mostly sensible defaults
 syntax on
 filetype plugin on
+
+" Go to last knows cursor position
+if has("autocmd")
+  au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
+endif
 
 " Spell checking
 set spell spelllang=en_us
@@ -75,8 +66,11 @@ set signcolumn=yes
 set ffs=unix,dos,mac
 set nocompatible
 set updatetime=300
-set number
-set relativenumber
+
+" Hide line numbers for now
+" set number
+" set relativenumber
+
 set path=+=**
 set expandtab
 set autoread
@@ -92,7 +86,7 @@ set hidden
 set nowrap
 set scrolloff=999
 set nostartofline
-set nohlsearch
+set hlsearch
 set clipboard+=unnamedplus
 set diffopt+=vertical
 
@@ -116,13 +110,19 @@ set t_vb=
 set tm=500
 
 set nobackup
+set nowritebackup
 set noswapfile
 set noundofile
 
 syntax on
-let g:xcodedark_green_comments=1
-let g:xcodedark_emph_funcs=1
-colorscheme xcodedark
+" let g:xcodedark_green_comments=1
+" let g:xcodedark_emph_funcs=1
+colorscheme paper
+
+let g:blamer_prefix = ':: '
+let g:blamer_template = '<author> <author-time> <summary>'
+let g:blamer_date_format = '%d.%m.%Y %H:%M'
+let g:blamer_enabled = 0
 
 " Macros; qq to record, Q to replay
 nnoremap Q @q
@@ -135,32 +135,39 @@ nnoremap E $
 nnoremap ^ <nop>
 nnoremap $ <nop>
 
-nnoremap <leader>q :q<CR>
-
 " Jump to split buffers
 nnoremap <C-J> <C-W><C-J>
 nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
 
-" Replace from register zero
+" Replace from register zero (allows multiple same changes
 map <C-j> cw<C-r>0<ESC>
 
 " Searches
-nnoremap <silent> <leader>sc :nohlsearch<CR>
 nnoremap <leader>sf :Files<CR>
 nnoremap <leader>sp :GFiles<CR>
 nnoremap <leader>sP :GFiles?<CR>
-nnoremap <leader>sb :Lines<CR>
+nnoremap <leader><CR> :FZFMru<CR>
+nnoremap <leader>sl :Lines<CR>
+nnoremap <Leader>sb :Buffers<CR>
 nnoremap ? :BLines<CR>
 
-nnoremap <leader>ft :Fern . -reveal=% -drawer<CR>
-nnoremap <leader>rc :e ~/.vimrc<CR>
-nnoremap <Leader>rr :source $MYVIMRC<CR>
-nnoremap <LocalLeader>e :edit <C-R>=expand('%:p:h') . '/'<CR>
 
-" Windows
-nnoremap <Leader>o :only<CR>
+" Easymotion
+let g:EasyMotion_smartcase = 1
+let g:EasyMotion_keys = 'abcdefghijklmnopqrstuvwxyz'
+let g:EasyMotion_do_mapping=0
+nmap <LocalLeader>g <Plug>(easymotion-s)
+
+" Better indenting
+vnoremap < <gv
+vnoremap > >gv
+
+nnoremap <silent><Leader>ft :Vifm<CR>
+
+nnoremap <leader>rc :e ~/.vimrc<CR>
+nnoremap <LocalLeader>e :edit <C-R>=expand('%:p:h') . '/'<CR>
 
 " Productivity
 command! W w
@@ -171,7 +178,7 @@ nnoremap dw diw
 nnoremap vw viw
 nnoremap yw yiw
 
-command! OpenJournal :edit ~/Dropbox/Journal
+command! OpenJournal :Vifm ~/Dropbox/Journal
 command! Bclose :bufdo bd
 
 nnoremap <Leader>o :only<CR>
@@ -186,6 +193,7 @@ nmap <silent> rn <Plug>(coc-rename)
 nmap <silent> qf <Plug>(coc-fix-current)
 nmap <silent> ge <Plug>(coc-diagnostic-prev)
 nmap <silent> gE <Plug>(coc-diagnostic-next)
+vmap <leader> fs <Plug>(coc-format-selected)
 
 function! s:show_documentation()
   if (index(['vim','help'], &filetype) >= 0)
@@ -213,20 +221,21 @@ endfunction
 let g:coc_global_extensions = ['coc-tsserver',
                               \'coc-reason',
                               \'coc-prettier',
-                              \'coc-snippets',
                               \'coc-python',
                               \'coc-emmet',
                               \'coc-phpls',
                               \ ]
+
+" Python
+" g:python3_host_prog = "/usr/local/bin/python3"
+autocmd FileType python map <Leader>x :! python %<CR>
+
 " Closetag
 let g:closetag_filenames = '*.html, *.view.php, *.jsx, *.tsx'
 let g:closetag_regions = {
 \ 'typescript.tsx': 'jsxRegion,tsxRegion',
 \ 'javascript.jsx': 'jsxRegion',
 \ }
-
-" Tidy (http://api.html-tidy.org/tidy/quickref_next.html)
-" let g:ale_html_tidy_options = '--custom-tags blocklevel --drop-empty-elements no --show-body-only true'
 
 function! TrimWhiteSpace()
   %s/\s*$//
@@ -243,29 +252,43 @@ command! -nargs=0 Workon call fzf#run(
             \ 'down': '20%'
             \ })
 
-nnoremap <C-p> :GitGutterPrevHunk<CR>
-nnoremap <C-o> :GitGutterNextHunk<CR>
+nnoremap <silent><C-n> :GitGutterPrevHunk<CR>
+nnoremap <silent><C-m> :GitGutterNextHunk<CR>
 
-" Buffer
-nnoremap <Tab> :buffer#<CR>
-nnoremap <S-Tab> :bprevious<CR>
-nnoremap <Leader>bb :Buffers<CR>
+" Expansions
+map <Leader>K <Plug>(expand_region_expand)
+map <Leader>J <Plug>(expand_region_shrink)
 
 " TypeScript / JavscScript
 autocmd Filetype typescript setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
 autocmd Filetype javascript setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
 
+" Ocaml
+autocmd FileType ocaml map <leader>x :! ocaml %<CR>
+
+" Disable autocomment  on new line
+autocmd BufNewFile,BufWinEnter * setlocal formatoptions-=cro
+
 " Prettier (using coc-prettier)
 command! -nargs=0 Prettier :CocCommand prettier.formatFile
 
-" PHP
+" PHP templates
 autocmd BufNewFile,BufRead *.view.php setlocal ft=html
 
 " Abbreviations
 iab date: <c-r>=strftime("%d.%m.%Y")
-imap cll console.log()<Esc><S-f>(a
+imap cll console.log()<Esc>i
+
+" Floatterm
+let g:floaterm_autoclose=1
+let g:floaterm_width=0.95
+nnoremap <Leader>tt :FloatermNew lazygit<CR>
 
 " FZF
 let $FZF_DEFAULT_OPTS='--reverse'
-let g:fzf_layout = { 'down': '~20%' }
+let g:fzf_layout = { 'window': { 'width': 0.8, 'height': 0.5, 'highlight': 'Comment' } }
+" https://github.com/kyazdani42/dotfiles/blob/master/config/nvim/init.vim
+autocmd! FileType fzf set laststatus=0 noshowmode noruler nonumber norelativenumber
+  \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler relativenumber
+
 
