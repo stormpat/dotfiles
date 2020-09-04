@@ -1,14 +1,13 @@
 " @stormpat's Vim config
 
 call plug#begin('~/.vim/plugged')
-" Plug 'arzg/vim-colors-xcode'
-Plug 'YorickPeterse/vim-paper'
+Plug 'ashfinal/vim-colors-paper'
 Plug 'habamax/vim-polar'
 
 Plug 'airblade/vim-gitgutter'
-Plug 'tpope/vim-fugitive'
 Plug 'romgrk/searchReplace.vim'
 Plug 'APZelos/blamer.nvim'
+Plug 'rhysd/git-messenger.vim'
 
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'tpope/vim-surround'
@@ -67,7 +66,6 @@ set ffs=unix,dos,mac
 set nocompatible
 set updatetime=300
 
-" Hide line numbers for now
 " set number
 " set relativenumber
 
@@ -97,7 +95,7 @@ highlight ColorColumn ctermbg=236
 set cursorline
 highlight CursorLine ctermbg=236
 
-hi ExtraWhitespace ctermbg=black guibg=black
+hi ExtraWhitespace ctermbg=black guibg=black    
 match ExtraWhitespace /\s\+$/
 
 set laststatus=2
@@ -115,9 +113,8 @@ set noswapfile
 set noundofile
 
 syntax on
-" let g:xcodedark_green_comments=1
-" let g:xcodedark_emph_funcs=1
 colorscheme paper
+set background=light
 
 let g:blamer_prefix = ':: '
 let g:blamer_template = '<author> <author-time> <summary>'
@@ -153,6 +150,14 @@ nnoremap <leader>sl :Lines<CR>
 nnoremap <Leader>sb :Buffers<CR>
 nnoremap ? :BLines<CR>
 
+" Git stuff
+nnoremap <silent><Leader>bs :BlamerToggle<CR>
+
+let g:git_messenger_include_diff = 'none'
+let g:git_messenger_close_on_cursor_moved=1
+let g:git_messenger_max_popup_width=0.8
+let g:git_messenger_always_into_popup=1
+let g:git_messenger_date_format = "%d.%m.%Y %X"
 
 " Easymotion
 let g:EasyMotion_smartcase = 1
