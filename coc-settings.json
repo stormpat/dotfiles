@@ -2,10 +2,15 @@
   "python.jediEnabled": false,
   "python.formatting.provider": "black",
   "languageserver": {
-     "ocaml": {
-       "command": "ocaml-language-server",
-       "args": ["--stdio"],
-       "filetypes": ["ocaml"]
-     }
+    "ocaml": {
+      "command": "ocaml-language-server",
+      "args": ["--stdio"],
+      "filetypes": ["ocaml"]
+    },
+    "golang": {
+      "command": "gopls",
+      "rootPatterns": ["go.mod", ".vim/", ".git/", ".hg/"],
+      "filetypes": ["go"]
+    }
   }
 }

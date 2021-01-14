@@ -1,13 +1,16 @@
 " @stormpat's Vim config
 
 call plug#begin('~/.vim/plugged')
-Plug 'ashfinal/vim-colors-paper'
-Plug 'habamax/vim-polar'
+Plug 'morhetz/gruvbox'
+Plug 'aonemd/kuroi.vim'
+Plug 'olivertaylor/vacme'
+Plug 'ajgrf/parchment'
 
 Plug 'airblade/vim-gitgutter'
 Plug 'romgrk/searchReplace.vim'
 Plug 'APZelos/blamer.nvim'
 Plug 'rhysd/git-messenger.vim'
+Plug 'jiangmiao/auto-pairs'
 
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'tpope/vim-surround'
@@ -16,6 +19,7 @@ Plug 'tpope/vim-commentary'
 Plug 'alvan/vim-closetag'
 Plug 'terryma/vim-expand-region'
 Plug 'easymotion/vim-easymotion'
+Plug 'fatih/vim-go'
 
 Plug 'voldikss/vim-floaterm'
 Plug 'mhinz/vim-startify'
@@ -27,7 +31,6 @@ Plug 'vifm/vifm.vim'
 
 Plug 'leafgarland/typescript-vim'
 Plug 'ianks/vim-tsx'
-Plug 'fatih/vim-go'
 Plug 'reasonml-editor/vim-reason-plus'
 Plug 'cespare/vim-toml'
 call plug#end()
@@ -49,7 +52,8 @@ endif
 set spell spelllang=en_us
 set nospell
 
-set termguicolors
+set nohlsearch
+" set termguicolors
 set splitbelow
 set autoindent
 set backspace=indent,eol,start
@@ -88,15 +92,26 @@ set hlsearch
 set clipboard+=unnamedplus
 set diffopt+=vertical
 
+" Visuals
+syntax on
+let g:gruvbox_contrast_light = 'medium'
+let g:gruvbox_invert_selection = 0
+
+colorscheme gruvbox
+set background=light
 " Highlights (https://upload.wikimedia.org/wikipedia/commons/1/15/Xterm_256color_chart.svg)
-set colorcolumn=100
-highlight ColorColumn ctermbg=236
+set colorcolumn=100,101
+highlight ColorColumn ctermbg=186
 
 set cursorline
-highlight CursorLine ctermbg=236
+highlight CursorLine ctermbg=186
+" highlight SignColumn ctermbg=230
+highlight SignColumn ctermbg=186 guibg=186
+highlight StatusLine cterm=reverse ctermfg=186 ctermbg=237 gui=reverse guifg=186 guibg=186
 
-hi ExtraWhitespace ctermbg=black guibg=black    
+hi ExtraWhitespace ctermbg=red guibg=red
 match ExtraWhitespace /\s\+$/
+autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red
 
 set laststatus=2
 set noshowmode
@@ -111,10 +126,6 @@ set nobackup
 set nowritebackup
 set noswapfile
 set noundofile
-
-syntax on
-colorscheme paper
-set background=light
 
 let g:blamer_prefix = ':: '
 let g:blamer_template = '<author> <author-time> <summary>'
@@ -145,25 +156,32 @@ map <C-j> cw<C-r>0<ESC>
 nnoremap <leader>sf :Files<CR>
 nnoremap <leader>sp :GFiles<CR>
 nnoremap <leader>sP :GFiles?<CR>
+nnoremap <LocalLeader><CR> :Buffers<CR>
 nnoremap <leader><CR> :FZFMru<CR>
 nnoremap <leader>sl :Lines<CR>
-nnoremap <Leader>sb :Buffers<CR>
 nnoremap ? :BLines<CR>
 
 " Git stuff
-nnoremap <silent><Leader>bs :BlamerToggle<CR>
+nnoremap <silent><Leader>bb :BlamerToggle<CR>
 
 let g:git_messenger_include_diff = 'none'
 let g:git_messenger_close_on_cursor_moved=1
-let g:git_messenger_max_popup_width=0.8
+let g:git_messenger_max_popup_width=0.95
 let g:git_messenger_always_into_popup=1
 let g:git_messenger_date_format = "%d.%m.%Y %X"
 
 " Easymotion
 let g:EasyMotion_smartcase = 1
-let g:EasyMotion_keys = 'abcdefghijklmnopqrstuvwxyz'
+let g:EasyMotion_keys = 'sdfjkla;eruiopcvnmty'
 let g:EasyMotion_do_mapping=0
-nmap <LocalLeader>g <Plug>(easymotion-s)
+
+nmap <LocalLeader>f <Plug>(easymotion-s)
+map  / <Plug>(easymotion-s2)
+omap / <Plug>(easymotion-t2)
+map  n <Plug>(easymotion-next)
+map  N <Plug>(easymotion-prev)
+
+
 
 " Better indenting
 vnoremap < <gv
@@ -232,7 +250,9 @@ let g:coc_global_extensions = ['coc-tsserver',
                               \ ]
 
 " Python
-" g:python3_host_prog = "/usr/local/bin/python3"
+let g:python3_host_prog = "/usr/local/bin/python3"
+let g:python_host_prog  = '/usr/bin/python2'
+
 autocmd FileType python map <Leader>x :! python %<CR>
 
 " Closetag
@@ -268,6 +288,11 @@ map <Leader>J <Plug>(expand_region_shrink)
 autocmd Filetype typescript setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
 autocmd Filetype javascript setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
 
+" Go
+let g:go_def_mapping_enabled = 0
+let g:go_fmt_command = "goimports"
+
+
 " Ocaml
 autocmd FileType ocaml map <leader>x :! ocaml %<CR>
 
@@ -276,9 +301,11 @@ autocmd BufNewFile,BufWinEnter * setlocal formatoptions-=cro
 
 " Prettier (using coc-prettier)
 command! -nargs=0 Prettier :CocCommand prettier.formatFile
+vmap <leader>ff  <Plug>(coc-format-selected)
 
 " PHP templates
 autocmd BufNewFile,BufRead *.view.php setlocal ft=html
+autocmd BufNewFile,BufRead *.blade.php setlocal ft=html
 
 " Abbreviations
 iab date: <c-r>=strftime("%d.%m.%Y")
@@ -295,5 +322,4 @@ let g:fzf_layout = { 'window': { 'width': 0.8, 'height': 0.5, 'highlight': 'Comm
 " https://github.com/kyazdani42/dotfiles/blob/master/config/nvim/init.vim
 autocmd! FileType fzf set laststatus=0 noshowmode noruler nonumber norelativenumber
   \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler relativenumber
-
 
