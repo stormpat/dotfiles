@@ -1,24 +1,20 @@
 " @stormpat's Vim config
 
 call plug#begin('~/.vim/plugged')
-Plug 'morhetz/gruvbox'
-Plug 'aonemd/kuroi.vim'
-Plug 'olivertaylor/vacme'
-Plug 'ajgrf/parchment'
+Plug 'axvr/photon.vim'
+" Plug 'tacahiroy/vim-colors-isotake'
 
 Plug 'airblade/vim-gitgutter'
-Plug 'romgrk/searchReplace.vim'
 Plug 'APZelos/blamer.nvim'
 Plug 'rhysd/git-messenger.vim'
-Plug 'jiangmiao/auto-pairs'
+Plug 'tmsvg/pear-tree'
 
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-commentary'
 Plug 'alvan/vim-closetag'
-Plug 'terryma/vim-expand-region'
-Plug 'easymotion/vim-easymotion'
+" Plug 'easymotion/vim-easymotion'
 Plug 'fatih/vim-go'
 
 Plug 'voldikss/vim-floaterm'
@@ -52,7 +48,6 @@ endif
 set spell spelllang=en_us
 set nospell
 
-set nohlsearch
 " set termguicolors
 set splitbelow
 set autoindent
@@ -69,10 +64,6 @@ set signcolumn=yes
 set ffs=unix,dos,mac
 set nocompatible
 set updatetime=300
-
-" set number
-" set relativenumber
-
 set path=+=**
 set expandtab
 set autoread
@@ -88,28 +79,25 @@ set hidden
 set nowrap
 set scrolloff=999
 set nostartofline
-set hlsearch
+set nohlsearch
 set clipboard+=unnamedplus
 set diffopt+=vertical
 
 " Visuals
 syntax on
-let g:gruvbox_contrast_light = 'medium'
-let g:gruvbox_invert_selection = 0
-
-colorscheme gruvbox
+colorscheme antiphoton
 set background=light
-" Highlights (https://upload.wikimedia.org/wikipedia/commons/1/15/Xterm_256color_chart.svg)
-set colorcolumn=100,101
-highlight ColorColumn ctermbg=186
 
+" Highlights term codes (https://upload.wikimedia.org/wikipedia/commons/1/15/Xterm_256color_chart.svg)
+set colorcolumn=100
 set cursorline
-highlight CursorLine ctermbg=186
-" highlight SignColumn ctermbg=230
-highlight SignColumn ctermbg=186 guibg=186
-highlight StatusLine cterm=reverse ctermfg=186 ctermbg=237 gui=reverse guifg=186 guibg=186
+highlight Visual cterm=NONE ctermbg=45 ctermfg=21
+highlight ExtraWhitespace ctermbg=45
 
-hi ExtraWhitespace ctermbg=red guibg=red
+" map  / <Plug>(easymotion-s)
+highligh EasyMotionTarget ctermfg=016 cterm=none
+highligh EasyMotionShade ctermbg=none ctermfg=249
+
 match ExtraWhitespace /\s\+$/
 autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red
 
@@ -171,17 +159,16 @@ let g:git_messenger_always_into_popup=1
 let g:git_messenger_date_format = "%d.%m.%Y %X"
 
 " Easymotion
-let g:EasyMotion_smartcase = 1
-let g:EasyMotion_keys = 'sdfjkla;eruiopcvnmty'
-let g:EasyMotion_do_mapping=0
+" let g:EasyMotion_smartcase = 1
+" let g:EasyMotion_keys = 'sdfjkla;eruiopcvnmty'
+" let g:EasyMotion_do_mapping=0
 
-nmap <LocalLeader>f <Plug>(easymotion-s)
-map  / <Plug>(easymotion-s2)
-omap / <Plug>(easymotion-t2)
-map  n <Plug>(easymotion-next)
-map  N <Plug>(easymotion-prev)
-
-
+" nmap <LocalLeader>f <Plug>(easymotion-s)
+" " map  / <Plug>(easymotion-s2)
+" map  / <Plug>(easymotion-s)
+" omap / <Plug>(easymotion-t2)
+" map  n <Plug>(easymotion-next)
+" map  N <Plug>(easymotion-prev)
 
 " Better indenting
 vnoremap < <gv
@@ -201,7 +188,7 @@ nnoremap dw diw
 nnoremap vw viw
 nnoremap yw yiw
 
-command! OpenJournal :Vifm ~/Dropbox/Journal
+command! OpenJournal :Vifm /Users/stormpat/Dropbox/Journal/
 command! Bclose :bufdo bd
 
 nnoremap <Leader>o :only<CR>
@@ -277,12 +264,20 @@ command! -nargs=0 Workon call fzf#run(
             \ 'down': '20%'
             \ })
 
-nnoremap <silent><C-n> :GitGutterPrevHunk<CR>
-nnoremap <silent><C-m> :GitGutterNextHunk<CR>
+nmap ) <Plug>(GitGutterNextHunk)
+nmap ( <Plug>(GitGutterPrevHunk)
+let g:gitgutter_enabled = 1
+let g:gitgutter_map_keys = 0
+let g:gitgutter_highlight_linenrs = 1
 
-" Expansions
-map <Leader>K <Plug>(expand_region_expand)
-map <Leader>J <Plug>(expand_region_shrink)
+" Statusline
+set statusline=
+      \\ %{&filetype!=#''?&filetype:'none'}
+      \\ %{&readonly\|\|!&modifiable?&modified?'%*':'%%':&modified?'**':'--'}
+      \\ %{expand('%:~:.')!=#''?expand('%:~:.'):'[No\ Name]'}
+      \%=
+      \%<\ C%c%3(%)L%l/%L%2(%)
+      \%6(%p%%\ %)
 
 " TypeScript / JavscScript
 autocmd Filetype typescript setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
@@ -292,7 +287,6 @@ autocmd Filetype javascript setlocal expandtab tabstop=2 shiftwidth=2 softtabsto
 let g:go_def_mapping_enabled = 0
 let g:go_fmt_command = "goimports"
 
-
 " Ocaml
 autocmd FileType ocaml map <leader>x :! ocaml %<CR>
 
@@ -301,7 +295,7 @@ autocmd BufNewFile,BufWinEnter * setlocal formatoptions-=cro
 
 " Prettier (using coc-prettier)
 command! -nargs=0 Prettier :CocCommand prettier.formatFile
-vmap <leader>ff  <Plug>(coc-format-selected)
+" BROKEN --> vmap <leader>ff  <Plug>(coc-format-selected)
 
 " PHP templates
 autocmd BufNewFile,BufRead *.view.php setlocal ft=html
@@ -310,6 +304,7 @@ autocmd BufNewFile,BufRead *.blade.php setlocal ft=html
 " Abbreviations
 iab date: <c-r>=strftime("%d.%m.%Y")
 imap cll console.log()<Esc>i
+imap pll fmt.Println()<Esc>i
 
 " Floatterm
 let g:floaterm_autoclose=1
@@ -322,4 +317,15 @@ let g:fzf_layout = { 'window': { 'width': 0.8, 'height': 0.5, 'highlight': 'Comm
 " https://github.com/kyazdani42/dotfiles/blob/master/config/nvim/init.vim
 autocmd! FileType fzf set laststatus=0 noshowmode noruler nonumber norelativenumber
   \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler relativenumber
+
+" NO GUI!! GUI related
+" set guifont=Monaco:h13
+
+nnoremap <silent> <Leader>+ :exe "resize " . (winheight(0) * 3/2)<CR>
+nnoremap <silent> <Leader>- :exe "resize " . (winheight(0) * 2/3)<CR>
+
+" Cheatsheets
+command! CheatsheetsVifm :!open https://vifm.info/cheatsheets.shtml
+command! CheatsheetsVIM :!open https://vim.rtorr.com/
+
 
