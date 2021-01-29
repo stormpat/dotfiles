@@ -14,7 +14,6 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-commentary'
 Plug 'alvan/vim-closetag'
-" Plug 'easymotion/vim-easymotion'
 Plug 'fatih/vim-go'
 
 Plug 'voldikss/vim-floaterm'
@@ -94,10 +93,6 @@ set cursorline
 highlight Visual cterm=NONE ctermbg=45 ctermfg=21
 highlight ExtraWhitespace ctermbg=45
 
-" map  / <Plug>(easymotion-s)
-highligh EasyMotionTarget ctermfg=016 cterm=none
-highligh EasyMotionShade ctermbg=none ctermfg=249
-
 match ExtraWhitespace /\s\+$/
 autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red
 
@@ -158,18 +153,6 @@ let g:git_messenger_max_popup_width=0.95
 let g:git_messenger_always_into_popup=1
 let g:git_messenger_date_format = "%d.%m.%Y %X"
 
-" Easymotion
-" let g:EasyMotion_smartcase = 1
-" let g:EasyMotion_keys = 'sdfjkla;eruiopcvnmty'
-" let g:EasyMotion_do_mapping=0
-
-" nmap <LocalLeader>f <Plug>(easymotion-s)
-" " map  / <Plug>(easymotion-s2)
-" map  / <Plug>(easymotion-s)
-" omap / <Plug>(easymotion-t2)
-" map  n <Plug>(easymotion-next)
-" map  N <Plug>(easymotion-prev)
-
 " Better indenting
 vnoremap < <gv
 vnoremap > >gv
@@ -177,7 +160,6 @@ vnoremap > >gv
 nnoremap <silent><Leader>ft :Vifm<CR>
 
 nnoremap <leader>rc :e ~/.vimrc<CR>
-nnoremap <LocalLeader>e :edit <C-R>=expand('%:p:h') . '/'<CR>
 
 " Productivity
 command! W w
@@ -302,9 +284,15 @@ autocmd BufNewFile,BufRead *.view.php setlocal ft=html
 autocmd BufNewFile,BufRead *.blade.php setlocal ft=html
 
 " Abbreviations
-iab date: <c-r>=strftime("%d.%m.%Y")
-imap cll console.log()<Esc>i
-imap pll fmt.Println()<Esc>i
+" iab date: <c-r>=strftime("%d.%m.%Y")
+" imap cll console.log()<Esc>i
+" imap pll fmt.Println()<Esc>i
+
+" Shorthand for log depending on filetype
+au BufEnter *.ts imap   cll console.log()<Esc>i
+au BufEnter *.js imap   cll console.log()<Esc>i
+au BufEnter *.go imap   cll fmt.Println()<Esc>i
+au BufEnter *.php imap  cll dump()<Esc>i
 
 " Floatterm
 let g:floaterm_autoclose=1
